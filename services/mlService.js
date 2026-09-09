@@ -55,6 +55,8 @@ async function predictDelay(caseData) {
             }
         };
     }
+}
+
 async function checkRetrain(caseCount) {
     try {
         const response = await axios.post(`${FASTAPI_URL}/retrain/check?case_count=${caseCount || 0}`, {}, {
