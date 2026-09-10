@@ -1,75 +1,81 @@
 <% layout('layouts/boilerplate') %>
 
-    <div class="container-fluid py-4 px-4">
+    <div class="container-fluid py-3 px-3 px-lg-4">
 
-        <!-- Page Header -->
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <!-- Page Header (Compact) -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
             <div>
-                <h2 class="fw-bold text-navy mb-1"><i class="bi bi-bar-chart-line-fill text-teal me-2"></i> Analytics
-                    Dashboard</h2>
-                <p class="text-muted mb-0">Real-time predictive insights across all assessed land acquisition projects
-                </p>
+                <h4 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-bar-chart-line-fill text-teal"></i> Analytics Dashboard
+                </h4>
+                <div class="text-muted small" style="font-size: 0.8rem;">Real-time predictive insights across all assessed land acquisition projects</div>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <a href="/map" class="btn btn-gis-pill">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px"
-                        fill="#FFFFFF" style="vertical-align: middle;">
-                        <path
-                            d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480t31.5-156Q143-709 197-763t127-85.5Q397-880 480-880t156 31.5Q709-817 763-763t85.5 127Q880-563 880-480t-31.5 156Q817-251 763-197t-127 85.5Q563-80 480-80t-156-31.5ZM480-260q45-45 80-93 30-41 55-90t25-97q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 48 25 97t55 90q35 48 80 93Zm-42.5-237.5Q420-515 420-540t17.5-42.5Q455-600 480-600t42.5 17.5Q540-565 540-540t-17.5 42.5Q505-480 480-480t-42.5-17.5Z" />
+                <a href="/map" class="btn btn-gis-pill btn-sm py-1 px-2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#FFFFFF" style="vertical-align: middle;">
+                        <path d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480t31.5-156Q143-709 197-763t127-85.5Q397-880 480-880t156 31.5Q709-817 763-763t85.5 127Q880-563 880-480t-31.5 156Q817-251 763-197t-127 85.5Q563-80 480-80t-156-31.5ZM480-260q45-45 80-93 30-41 55-90t25-97q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 48 25 97t55 90q35 48 80 93Zm-42.5-237.5Q420-515 420-540t17.5-42.5Q455-600 480-600t42.5 17.5Q540-565 540-540t-17.5 42.5Q505-480 480-480t-42.5-17.5Z" />
                     </svg>
-                    <span>GIS Map View</span>
+                    <span>GIS Map</span>
                 </a>
-                <a href="/predict" class="btn btn-teal btn-sm fw-bold">
+                <a href="/predict" class="btn btn-teal btn-sm fw-semibold py-1 px-3">
                     <i class="bi bi-plus-circle me-1"></i> New Assessment
                 </a>
             </div>
         </div>
 
-        <!-- KPI Cards Row -->
-        <div class="row g-3 mb-4">
+        <!-- KPI Metric Cards (Compact Row) -->
+        <div class="row g-2 mb-3">
             <div class="col-6 col-md-3">
-                <div class="card border-0 shadow-sm rounded-4 p-3 text-center h-100">
-                    <div class="text-muted small fw-semibold text-uppercase mb-1">Total Cases</div>
-                    <div class="display-6 fw-extrabold text-navy">
+                <div class="card border-0 rounded-3 p-2.5 px-3 h-100" style="background: #1E1E1E; border-top: 2px solid #06B6D4 !important;">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Total Cases</span>
+                        <i class="bi bi-folder2-open text-teal" style="font-size: 0.95rem;"></i>
+                    </div>
+                    <div class="fs-3 fw-bold text-white lh-1 mb-1">
                         <%= stats.total %>
                     </div>
-                    <div class="small text-muted mt-1"><i class="bi bi-folder2-open me-1"></i>All Projects</div>
+                    <div class="small text-muted" style="font-size: 0.75rem;">All registered corridors</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div
-                    class="card border-0 shadow-sm rounded-4 p-3 text-center h-100 border-start border-4 border-danger">
-                    <div class="text-muted small fw-semibold text-uppercase mb-1">High Risk</div>
-                    <div class="display-6 fw-extrabold text-danger">
+                <div class="card border-0 rounded-3 p-2.5 px-3 h-100" style="background: #1E1E1E; border-top: 2px solid #EF4444 !important;">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">High Risk</span>
+                        <span class="pulsing-red-dot"></span>
+                    </div>
+                    <div class="fs-3 fw-bold text-danger lh-1 mb-1">
                         <%= stats.high %>
                     </div>
-                    <div class="small text-danger mt-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>Needs Action
-                    </div>
+                    <div class="small text-danger" style="font-size: 0.75rem;"><i class="bi bi-exclamation-triangle-fill me-1"></i>Requires CALA review</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div
-                    class="card border-0 shadow-sm rounded-4 p-3 text-center h-100 border-start border-4 border-warning">
-                    <div class="text-muted small fw-semibold text-uppercase mb-1">Medium Risk</div>
-                    <div class="display-6 fw-extrabold text-warning">
+                <div class="card border-0 rounded-3 p-2.5 px-3 h-100" style="background: #1E1E1E; border-top: 2px solid #F59E0B !important;">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Medium Risk</span>
+                        <i class="bi bi-eye-fill text-warning" style="font-size: 0.95rem;"></i>
+                    </div>
+                    <div class="fs-3 fw-bold text-warning lh-1 mb-1">
                         <%= stats.medium %>
                     </div>
-                    <div class="small text-warning mt-1"><i class="bi bi-eye-fill me-1"></i>Monitor</div>
+                    <div class="small text-warning" style="font-size: 0.75rem;">Active corridor monitoring</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div
-                    class="card border-0 shadow-sm rounded-4 p-3 text-center h-100 border-start border-4 border-success">
-                    <div class="text-muted small fw-semibold text-uppercase mb-1">Avg Delay Prob.</div>
-                    <div class="display-6 fw-extrabold text-success">
+                <div class="card border-0 rounded-3 p-2.5 px-3 h-100" style="background: #1E1E1E; border-top: 2px solid #10B981 !important;">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Avg Delay Prob.</span>
+                        <i class="bi bi-graph-up text-success" style="font-size: 0.95rem;"></i>
+                    </div>
+                    <div class="fs-3 fw-bold text-success lh-1 mb-1">
                         <%= stats.avgProb %>%
                     </div>
-                    <div class="small text-muted mt-1"><i class="bi bi-graph-up me-1"></i>Across All Cases</div>
+                    <div class="small text-muted" style="font-size: 0.75rem;">Across all assessed records</div>
                 </div>
             </div>
         </div>
 
-        <!-- Continuous Learning & Self-Retraining MLOps Telemetry Card -->
+        <!-- Continuous Learning MLOps Telemetry Strip (Compact HUD) -->
         <% 
             const rt = (typeof retrainStatus !== 'undefined' && retrainStatus) ? retrainStatus : {
                 active_version: 'v1.5',
@@ -82,186 +88,226 @@
             const progressPercent = Math.min(Math.round((currentBatchCount / 500) * 100), 100);
             const remainingToRetrain = 500 - currentBatchCount;
         %>
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #1E1E1E; border: 1px solid rgba(255, 255, 255, 0.08);">
-            <div class="row align-items-center gy-3">
-                <div class="col-lg-4">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="pulse-indicator"></span>
-                        <span class="badge" style="background: rgba(30, 215, 96, 0.15); color: #1ED760; border: 1px solid rgba(30, 215, 96, 0.25);">Continuous Learning Active</span>
-                        <span class="badge" style="background: #121212; color: #CBD5E1; border: 1px solid rgba(255, 255, 255, 0.1);">Model: <%= rt.active_version || 'v1.5' %></span>
-                    </div>
-                    <h5 class="fw-bold text-white mb-1">Autonomous Dual-Engine XGBoost</h5>
-                    <p class="small text-muted mb-0">Self-retrains every 500 new case assessments using real-time MongoDB Atlas data.</p>
-                </div>
-                <div class="col-lg-5">
-                    <div class="d-flex justify-content-between align-items-center small mb-1">
-                        <span style="color: #94A3B8;">Auto-Retrain Cycle Progress:</span>
-                        <span class="fw-bold text-white"><%= currentBatchCount %> / 500 Cases (<%= remainingToRetrain %> remaining)</span>
-                    </div>
-                    <div class="progress" style="height: 8px; background-color: #121212; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 999px;">
-                        <div class="progress-bar" role="progressbar" data-width="<%= progressPercent %>" style="background: linear-gradient(90deg, #06B6D4, #1ED760); border-radius: 999px;"></div>
-                    </div>
-                    <div class="d-flex gap-3 mt-2 small" style="color: #94A3B8; font-size: 0.78rem;">
-                        <span><i class="bi bi-shield-check text-success me-1"></i>Accuracy: <strong><%= ((rt.accuracy || 0.9525) * 100).toFixed(1) %>%</strong></span>
-                        <span><i class="bi bi-graph-up text-info me-1"></i>R² Score: <strong><%= rt.r2_score || '0.9806' %></strong></span>
-                        <span><i class="bi bi-database-check text-warning me-1"></i>Trained Samples: <strong><%= rt.total_training_samples || 5050 %></strong></span>
+        <div class="card border-0 rounded-3 p-2.5 px-3 mb-3" style="background: #181818; border: 1px solid rgba(255, 255, 255, 0.08);">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="pulse-indicator"></span>
+                    <div>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="fw-bold text-white" style="font-size: 0.88rem;">Dual-Engine XGBoost</span>
+                            <span class="badge" style="background: rgba(30, 215, 96, 0.14); color: #1ED760; font-size: 0.68rem; padding: 0.2rem 0.45rem;">Active <%= rt.active_version || 'v1.5' %></span>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.72rem;">Self-retrains every 500 assessments via MongoDB Atlas</div>
                     </div>
                 </div>
-                <div class="col-lg-3 text-lg-end">
-                    <button id="triggerRetrainBtn" class="btn btn-outline-secondary btn-sm px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2" onclick="triggerManualRetrain()">
+
+                <div class="d-flex flex-grow-1 align-items-center gap-3 justify-content-center" style="max-width: 520px; min-width: 260px;">
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.72rem; color: #94A3B8;">
+                            <span>Cycle Batch: <strong class="text-white"><%= currentBatchCount %>/500</strong></span>
+                            <span><strong><%= remainingToRetrain %></strong> to retrain</span>
+                        </div>
+                        <div class="progress" style="height: 6px; background-color: #121212; border-radius: 999px;">
+                            <div class="progress-bar" role="progressbar" data-width="<%= progressPercent %>" style="background: linear-gradient(90deg, #06B6D4, #1ED760); border-radius: 999px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    <div class="d-none d-xl-flex gap-2 small text-muted" style="font-size: 0.74rem;">
+                        <span><i class="bi bi-shield-check text-success me-1"></i>Acc: <strong class="text-white"><%= ((rt.accuracy || 0.9525) * 100).toFixed(1) %>%</strong></span>
+                        <span><i class="bi bi-graph-up text-info me-1"></i>R²: <strong class="text-white"><%= rt.r2_score || '0.9806' %></strong></span>
+                        <span><i class="bi bi-database text-warning me-1"></i>N: <strong class="text-white"><%= rt.total_training_samples || 5050 %></strong></span>
+                    </div>
+                    <button id="triggerRetrainBtn" class="btn btn-outline-secondary btn-sm py-1 px-2.5 fw-semibold d-inline-flex align-items-center gap-1.5" style="font-size: 0.75rem;" onclick="triggerManualRetrain()">
                         <i class="bi bi-arrow-repeat" id="retrainSpinner"></i>
-                        <span id="retrainBtnText">Trigger Retrain Now</span>
+                        <span id="retrainBtnText">Trigger Retrain</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Row 1 -->
-        <div class="row g-4 mb-4">
+        <!-- Symmetrical 3x2 Unified Chart Grid -->
+        <div class="row g-2.5 mb-3">
 
-            <!-- Risk Distribution Doughnut -->
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h6 class="fw-bold text-navy mb-3"><i class="bi bi-pie-chart-fill text-primary me-2"></i>Risk Tier
-                        Distribution</h6>
-                    <div class="d-flex justify-content-center align-items-center" style="height:220px;">
+            <!-- Card 1: Risk Tier Distribution -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-3 p-3 h-100" style="background: #1E1E1E;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="fw-bold text-white mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-pie-chart-fill text-teal me-1.5"></i>Risk Tier Distribution
+                        </h6>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); font-size: 0.68rem; color: #94A3B8;">3 Tiers</span>
+                    </div>
+                    <div style="height: 165px; position: relative;">
                         <canvas id="riskDoughnut"></canvas>
                     </div>
-                    <div class="d-flex justify-content-center gap-3 mt-3 small">
-                        <span><span class="badge bg-danger me-1">&nbsp;</span>High: <%= stats.high %></span>
-                        <span><span class="badge bg-warning me-1">&nbsp;</span>Medium: <%= stats.medium %></span>
-                        <span><span class="badge bg-success me-1">&nbsp;</span>Low: <%= stats.low %></span>
+                    <div class="d-flex justify-content-center gap-2 mt-2" style="font-size: 0.72rem;">
+                        <span><span class="badge bg-danger p-1 me-0.5">&nbsp;</span>High: <%= stats.high %></span>
+                        <span><span class="badge bg-warning p-1 me-0.5">&nbsp;</span>Med: <%= stats.medium %></span>
+                        <span><span class="badge bg-success p-1 me-0.5">&nbsp;</span>Low: <%= stats.low %></span>
                     </div>
                 </div>
             </div>
 
-            <!-- State-wise Bar Chart -->
-            <div class="col-md-8">
-                <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h6 class="fw-bold text-navy mb-3"><i class="bi bi-geo-alt-fill text-success me-2"></i>High-Risk
-                        Cases by State</h6>
-                    <div style="height:240px;">
-                        <canvas id="stateBar"></canvas>
+            <!-- Card 2: Delay Probability Trend -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-3 p-3 h-100" style="background: #1E1E1E;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="fw-bold text-white mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-graph-up-arrow text-teal me-1.5"></i>Delay Probability Trend
+                        </h6>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); font-size: 0.68rem; color: #94A3B8;">Recent 20</span>
                     </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Charts Row 2 -->
-        <div class="row g-4 mb-4">
-
-            <!-- Delay Probability Trend Over Time -->
-            <div class="col-md-8">
-                <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h6 class="fw-bold text-navy mb-3"><i class="bi bi-graph-up-arrow text-info me-2"></i>Delay
-                        Probability Trend (Recent Assessments)</h6>
-                    <div style="height:240px;">
+                    <div style="height: 165px; position: relative;">
                         <canvas id="trendLine"></canvas>
                     </div>
+                    <div class="text-center text-muted mt-2" style="font-size: 0.72rem;">
+                        Temporal variance across last 20 corridor assessments
+                    </div>
                 </div>
             </div>
 
-            <!-- Project Type Breakdown -->
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h6 class="fw-bold text-navy mb-3"><i class="bi bi-building me-2 text-warning"></i>Cases by Project
-                        Sector</h6>
-                    <div style="height:240px;">
+            <!-- Card 3: Cases by Project Sector -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-3 p-3 h-100" style="background: #1E1E1E;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="fw-bold text-white mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-building text-teal me-1.5"></i>Cases by Project Sector
+                        </h6>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); font-size: 0.68rem; color: #94A3B8;">Sectors</span>
+                    </div>
+                    <div style="height: 165px; position: relative;">
                         <canvas id="projectTypeBar"></canvas>
                     </div>
+                    <div class="text-center text-muted mt-2" style="font-size: 0.72rem;">
+                        Highways, Railways, Metro, Energy & Ports
+                    </div>
                 </div>
             </div>
 
-        </div>
+            <!-- Card 4: High-Risk Cases by State -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-3 p-3 h-100" style="background: #1E1E1E;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="fw-bold text-white mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-geo-alt-fill text-teal me-1.5"></i>State-wise Risk Breakdown
+                        </h6>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); font-size: 0.68rem; color: #94A3B8;">States</span>
+                    </div>
+                    <div style="height: 165px; position: relative;">
+                        <canvas id="stateBar"></canvas>
+                    </div>
+                    <div class="text-center text-muted mt-2" style="font-size: 0.72rem;">
+                        Stacked risk distribution across jurisdictional states
+                    </div>
+                </div>
+            </div>
 
-        <!-- Charts Row 3 -->
-        <div class="row g-4 mb-4">
-
-            <!-- Milestone Progress Averages -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h6 class="fw-bold text-navy mb-3"><i class="bi bi-bar-chart-steps text-teal me-2"></i>Average
-                        Milestone Progress Across All Cases</h6>
-                    <div style="height:220px;">
+            <!-- Card 5: Average Milestone Progress -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-3 p-3 h-100" style="background: #1E1E1E;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="fw-bold text-white mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-bar-chart-steps text-teal me-1.5"></i>Milestone Progress Averages
+                        </h6>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); font-size: 0.68rem; color: #94A3B8;">4 Milestones</span>
+                    </div>
+                    <div style="height: 165px; position: relative;">
                         <canvas id="milestoneBar"></canvas>
                     </div>
+                    <div class="text-center text-muted mt-2" style="font-size: 0.72rem;">
+                        Notification • Award • Disbursement • Possession
+                    </div>
                 </div>
             </div>
 
-            <!-- Risk Factor Frequency -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                    <h6 class="fw-bold text-navy mb-3"><i
-                            class="bi bi-exclamation-octagon-fill text-danger me-2"></i>Most Common Delay Drivers</h6>
-                    <div style="height:220px;">
+            <!-- Card 6: Most Common Delay Drivers -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 rounded-3 p-3 h-100" style="background: #1E1E1E;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="fw-bold text-white mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-exclamation-octagon-fill text-danger me-1.5"></i>Top Delay Drivers
+                        </h6>
+                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); font-size: 0.68rem; color: #94A3B8;">Root Causes</span>
+                    </div>
+                    <div style="height: 165px; position: relative;">
                         <canvas id="riskFactorBar"></canvas>
+                    </div>
+                    <div class="text-center text-muted mt-2" style="font-size: 0.72rem;">
+                        Key bottleneck frequencies across all recorded disputes
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Recent High Risk Cases Table -->
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <h6 class="fw-bold text-navy mb-0"><i
-                        class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Recent High-Risk Projects</h6>
-                <a href="/history" class="btn btn-outline-secondary btn-sm">View All <i
-                        class="bi bi-arrow-right ms-1"></i></a>
+        <!-- Recent High-Risk Cases Table (Compact) -->
+        <div class="card border-0 rounded-3 p-3 mb-3" style="background: #1E1E1E;">
+            <div class="d-flex align-items-center justify-content-between mb-2.5">
+                <h6 class="fw-bold text-white mb-0" style="font-size: 0.88rem;">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-1.5"></i>Priority High-Risk Corridors
+                </h6>
+                <a href="/history" class="btn btn-outline-secondary btn-sm py-0.5 px-2" style="font-size: 0.75rem;">
+                    View All <i class="bi bi-arrow-right ms-1"></i>
+                </a>
             </div>
-            <% if (highRiskCases && highRiskCases.length> 0) { %>
+            <% if (highRiskCases && highRiskCases.length > 0) { %>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                    <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.82rem;">
+                        <thead style="background: rgba(255, 255, 255, 0.03); color: #94A3B8; font-size: 0.74rem;">
                             <tr>
-                                <th>Case ID</th>
-                                <th>Project Name</th>
-                                <th>State</th>
-                                <th>Sector</th>
-                                <th>Delay Prob.</th>
-                                <th>Top Driver</th>
-                                <th></th>
+                                <th class="py-1.5">Case ID</th>
+                                <th class="py-1.5">Project Name</th>
+                                <th class="py-1.5">State</th>
+                                <th class="py-1.5">Sector</th>
+                                <th class="py-1.5">Delay Prob.</th>
+                                <th class="py-1.5">Top Driver</th>
+                                <th class="py-1.5 text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% highRiskCases.forEach(c=> { %>
+                            <% highRiskCases.forEach(c => { %>
                                 <tr>
-                                    <td><span class="badge bg-light text-dark border">
+                                    <td class="py-1.5">
+                                        <span class="badge" style="background: #121212; color: #38BDF8; border: 1px solid rgba(255,255,255,0.08);">
                                             <%= c.case_id %>
-                                        </span></td>
-                                    <td class="fw-semibold">
+                                        </span>
+                                    </td>
+                                    <td class="fw-semibold text-white py-1.5">
                                         <%= c.project_name || 'N/A' %>
                                     </td>
-                                    <td><i class="bi bi-geo-alt text-muted me-1"></i>
-                                        <%= c.state %>
+                                    <td class="py-1.5">
+                                        <i class="bi bi-geo-alt text-muted me-1"></i><%= c.state %>
                                     </td>
-                                    <td>
-                                        <%= c.project_type %>
+                                    <td class="py-1.5">
+                                        <span class="badge" style="background: rgba(255, 255, 255, 0.06); color: #CBD5E1;">
+                                            <%= c.project_type %>
+                                        </span>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-danger-subtle text-danger fw-bold px-2">
+                                    <td class="py-1.5">
+                                        <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 700;">
                                             <%= c.delay_probability_percent %>
                                         </span>
                                     </td>
-                                    <td class="text-muted small">
+                                    <td class="text-muted py-1.5" style="font-size: 0.78rem;">
                                         <%= c.top_risk_factors && c.top_risk_factors[0] ?
-                                            c.top_risk_factors[0].substring(0, 40) + '...' : 'N/A' %>
+                                            c.top_risk_factors[0].substring(0, 38) + '...' : 'N/A' %>
                                     </td>
-                                    <td>
-                                        <a href="/history/<%= c._id %>" class="btn btn-outline-danger btn-sm">View</a>
+                                    <td class="py-1.5 text-end">
+                                        <a href="/history/<%= c._id %>" class="btn btn-outline-danger btn-sm py-0.5 px-2" style="font-size: 0.72rem;">Details</a>
                                     </td>
                                 </tr>
-                                <% }) %>
+                            <% }) %>
                         </tbody>
                     </table>
                 </div>
-                <% } else { %>
-                    <div class="text-center text-muted py-4">
-                        <i class="bi bi-check-circle-fill text-success fs-2 mb-2 d-block"></i>
-                        No High-Risk cases currently. Submit assessments to populate this dashboard.
-                    </div>
-                    <% } %>
+            <% } else { %>
+                <div class="text-center text-muted py-3">
+                    <i class="bi bi-check-circle-fill text-success fs-3 mb-1 d-block"></i>
+                    No High-Risk cases currently. Submit assessments to populate this dashboard.
+                </div>
+            <% } %>
         </div>
 
     </div>
@@ -274,37 +320,61 @@
 </script>
 
     <script>
+        // Set Chart.js Global Dark Theme Defaults
+        Chart.defaults.color = '#94A3B8';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.07)';
+        Chart.defaults.font.family = '"Noto Sans", Arial, sans-serif';
+        Chart.defaults.font.size = 10.5;
+
         // Data from server
         const { stats, stateChartData: stateData, trendChartData: trendData, sectorChartData: sectorData, milestoneData: milestones, factorChartData: factorData } = JSON.parse(document.getElementById('dashboard-data').textContent);
         const riskData = { high: stats.high, medium: stats.medium, low: stats.low };
 
-        const chartDefaults = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
+        const chartDefaults = { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { 
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleColor: '#FFFFFF',
+                    bodyColor: '#E2E8F0',
+                    borderColor: 'rgba(255, 255, 255, 0.12)',
+                    borderWidth: 1,
+                    padding: 8,
+                    cornerRadius: 8
+                }
+            } 
+        };
 
         // 1. Risk Doughnut
         new Chart(document.getElementById('riskDoughnut'), {
             type: 'doughnut',
             data: {
                 labels: ['High Risk', 'Medium Risk', 'Low Risk'],
-                datasets: [{ data: [riskData.high, riskData.medium, riskData.low], backgroundColor: ['#dc3545', '#ffc107', '#198754'], borderWidth: 2, hoverOffset: 8 }]
+                datasets: [{ 
+                    data: [riskData.high, riskData.medium, riskData.low], 
+                    backgroundColor: ['#EF4444', '#F59E0B', '#10B981'], 
+                    borderWidth: 0, 
+                    hoverOffset: 6 
+                }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} cases` } } }, cutout: '65%' }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { display: false }, 
+                    tooltip: { 
+                        callbacks: { 
+                            label: ctx => ` ${ctx.label}: ${ctx.raw} cases` 
+                        } 
+                    } 
+                }, 
+                cutout: '68%' 
+            }
         });
 
-        // 2. State Bar
-        new Chart(document.getElementById('stateBar'), {
-            type: 'bar',
-            data: {
-                labels: stateData.labels,
-                datasets: [
-                    { label: 'High Risk', data: stateData.high, backgroundColor: '#dc3545', borderRadius: 5 },
-                    { label: 'Medium Risk', data: stateData.medium, backgroundColor: '#ffc107', borderRadius: 5 },
-                    { label: 'Low Risk', data: stateData.low, backgroundColor: '#198754', borderRadius: 5 }
-                ]
-            },
-            options: { ...chartDefaults, plugins: { legend: { display: true, position: 'top' } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { stepSize: 1 } } } }
-        });
-
-        // 3. Trend Line
+        // 2. Trend Line
         new Chart(document.getElementById('trendLine'), {
             type: 'line',
             data: {
@@ -312,40 +382,96 @@
                 datasets: [{
                     label: 'Delay Probability (%)',
                     data: trendData.values,
-                    borderColor: '#0d6efd',
-                    backgroundColor: 'rgba(13,110,253,0.1)',
-                    tension: 0.4,
+                    borderColor: '#38BDF8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+                    tension: 0.35,
                     fill: true,
                     pointBackgroundColor: trendData.colors,
-                    pointRadius: 5
+                    pointRadius: 3.5,
+                    pointHoverRadius: 5
                 }]
             },
-            options: { ...chartDefaults, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 100, ticks: { callback: v => v + '%' } }, x: { grid: { display: false } } } }
+            options: { 
+                ...chartDefaults, 
+                scales: { 
+                    y: { 
+                        min: 0, 
+                        max: 100, 
+                        ticks: { callback: v => v + '%' } 
+                    }, 
+                    x: { grid: { display: false } } 
+                } 
+            }
         });
 
-        // 4. Project Type Bar
+        // 3. Project Type Bar
         new Chart(document.getElementById('projectTypeBar'), {
             type: 'bar',
             data: {
                 labels: sectorData.labels,
-                datasets: [{ label: 'Cases', data: sectorData.values, backgroundColor: ['#0d6efd', '#6f42c1', '#20c997', '#fd7e14', '#e83e8c'], borderRadius: 5 }]
+                datasets: [{ 
+                    label: 'Cases', 
+                    data: sectorData.values, 
+                    backgroundColor: ['#06B6D4', '#3B82F6', '#10B981', '#F59E0B', '#EC4899', '#8B5CF6'], 
+                    borderRadius: 4 
+                }]
             },
-            options: { ...chartDefaults, indexAxis: 'y', scales: { x: { ticks: { stepSize: 1 } }, y: { grid: { display: false } } } }
+            options: { 
+                ...chartDefaults, 
+                indexAxis: 'y', 
+                scales: { 
+                    x: { ticks: { stepSize: 1 } }, 
+                    y: { grid: { display: false } } 
+                } 
+            }
+        });
+
+        // 4. State Bar
+        new Chart(document.getElementById('stateBar'), {
+            type: 'bar',
+            data: {
+                labels: stateData.labels,
+                datasets: [
+                    { label: 'High', data: stateData.high, backgroundColor: '#EF4444', borderRadius: 3 },
+                    { label: 'Medium', data: stateData.medium, backgroundColor: '#F59E0B', borderRadius: 3 },
+                    { label: 'Low', data: stateData.low, backgroundColor: '#10B981', borderRadius: 3 }
+                ]
+            },
+            options: { 
+                ...chartDefaults, 
+                plugins: { 
+                    legend: { 
+                        display: true, 
+                        position: 'top',
+                        labels: { boxWidth: 10, boxHeight: 10, color: '#94A3B8', font: { size: 10 } }
+                    } 
+                }, 
+                scales: { 
+                    x: { stacked: true, grid: { display: false } }, 
+                    y: { stacked: true, ticks: { stepSize: 1 } } 
+                } 
+            }
         });
 
         // 5. Milestone Bar
         new Chart(document.getElementById('milestoneBar'), {
             type: 'bar',
             data: {
-                labels: ['Notified', 'Award Declared', 'Compensation\nDisbursed', 'Possession\nCompleted'],
+                labels: ['Notified', 'Award', 'Disbursed', 'Possession'],
                 datasets: [{
                     label: 'Average %',
                     data: [milestones.notified, milestones.award, milestones.disbursed, milestones.possession],
-                    backgroundColor: ['#0dcaf0', '#0d6efd', '#6f42c1', '#198754'],
-                    borderRadius: 5
+                    backgroundColor: ['#38BDF8', '#06B6D4', '#10B981', '#34D399'],
+                    borderRadius: 4
                 }]
             },
-            options: { ...chartDefaults, scales: { y: { min: 0, max: 100, ticks: { callback: v => v + '%' } }, x: { grid: { display: false } } } }
+            options: { 
+                ...chartDefaults, 
+                scales: { 
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' } }, 
+                    x: { grid: { display: false } } 
+                } 
+            }
         });
 
         // 6. Risk Factor Bar
@@ -353,9 +479,21 @@
             type: 'bar',
             data: {
                 labels: factorData.labels,
-                datasets: [{ label: 'Frequency', data: factorData.values, backgroundColor: '#dc3545', borderRadius: 5 }]
+                datasets: [{ 
+                    label: 'Frequency', 
+                    data: factorData.values, 
+                    backgroundColor: '#EF4444', 
+                    borderRadius: 4 
+                }]
             },
-            options: { ...chartDefaults, indexAxis: 'y', scales: { x: { ticks: { stepSize: 1 } }, y: { grid: { display: false } } } }
+            options: { 
+                ...chartDefaults, 
+                indexAxis: 'y', 
+                scales: { 
+                    x: { ticks: { stepSize: 1 } }, 
+                    y: { grid: { display: false } } 
+                } 
+            }
         });
 
         // Initialize Data Width Progress Bars
@@ -372,17 +510,17 @@
 
             btn.disabled = true;
             spinner.className = 'spinner-border spinner-border-sm';
-            btnText.textContent = 'Training on Atlas Data...';
+            btnText.textContent = 'Retraining...';
 
             try {
                 const res = await fetch('http://localhost:8000/retrain/trigger', { method: 'POST' });
                 const json = await res.json();
                 if (json.status === 'SUCCESS') {
-                    btnText.textContent = 'Model Updated! (' + (json.report ? json.report.model_version : 'v1.x') + ')';
+                    btnText.textContent = 'Updated (' + (json.report ? json.report.model_version : 'v1.x') + ')';
                     spinner.className = 'bi bi-check-circle-fill text-success';
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
-                    btnText.textContent = 'Retraining Completed';
+                    btnText.textContent = 'Completed';
                     spinner.className = 'bi bi-arrow-repeat';
                     btn.disabled = false;
                 }
@@ -390,7 +528,7 @@
                 btnText.textContent = 'Retrain Failed';
                 spinner.className = 'bi bi-exclamation-circle-fill text-danger';
                 setTimeout(() => {
-                    btnText.textContent = 'Trigger Retrain Now';
+                    btnText.textContent = 'Trigger Retrain';
                     spinner.className = 'bi bi-arrow-repeat';
                     btn.disabled = false;
                 }, 3000);

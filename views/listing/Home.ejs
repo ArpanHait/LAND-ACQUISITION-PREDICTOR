@@ -1,245 +1,285 @@
 <% layout('layouts/boilerplate') %>
 
-<!-- B & C. Hero Section (Left: Value Prop & CTA Cluster; Right: Real-Time Live Telemetry Card) -->
-<header class="hero-container">
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-        <div class="row align-items-center g-5">
-            <!-- Left Column: Value Prop & CTA Cluster -->
-            <div class="col-lg-7 col-xl-7">
-                <div class="badge-sih">
-                    <i class="bi bi-shield-check"></i>
-                    <span>Early Risk Detection Engine • SIH 2026</span>
-                </div>
-                <h1 class="hero-h1">
-                    Predictive Analytics for Early Detection of <span class="text-teal">Land Acquisition Delays</span>
-                </h1>
-                <p class="hero-description">
-                    Empowering CALA officers, Ministry of Railways, and NHAI engineers with machine learning to identify legal gridlocks, title disputes, and Section 3C/15 public objections up to 18 months before project execution bottlenecks occur.
-                </p>
-                <!-- Interactive 4-Button Action Cluster -->
-                <div class="cta-cluster">
-                    <a class="btn-primary-teal" href="/predict">
-                        <i class="bi bi-play-circle-fill"></i> Start Prediction
-                    </a>
-                    <a class="btn-outline-gov" href="/dashboard">
-                        <i class="bi bi-bar-chart-line"></i> Analytics Dashboard
-                    </a>
-                    <a class="btn-outline-gov" href="/map">
-                        <i class="bi bi-map"></i> GIS Map
-                    </a>
-                    <a class="btn-outline-danger-gov" href="/alerts">
-                        <i class="bi bi-bell-fill"></i> High-Risk Alerts
-                    </a>
-                </div>
-            </div>
-
-            <!-- Right Column: Real-Time Live Telemetry HUD Card -->
-            <div class="col-lg-5 col-xl-5">
-                <div class="glass-monitor-card">
-                    <!-- HUD Header -->
-                    <div class="monitor-card-header">
-                        <div>
-                            <div class="monitor-header-title">
-                                <i class="bi bi-speedometer2" style="color: #1ED760;"></i>
-                                <span>Real-time Telemetry Feed</span>
-                            </div>
-                            <div style="font-size: 0.75rem; color: #A7A7A7; margin-top: 0.2rem;">
-                                CALA Infrastructure Grid • Live Sync 18ms
-                            </div>
-                        </div>
-                        <div class="live-pulse-badge">
-                            <span class="live-dot"></span>
-                            <span>Active 99.9%</span>
-                        </div>
+    <!-- B & C. Hero Section (Left: Value Prop & CTA Cluster; Right: Real-Time Live Telemetry Card) -->
+    <header class="hero-container">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="row align-items-center g-5">
+                <!-- Left Column: Value Prop & CTA Cluster -->
+                <div class="col-lg-7 col-xl-7">
+                    <h1 class="hero-h1">
+                        Predictive Analytics for Early Detection of <span class="hero-highlight-teal">Land Acquisition
+                            Delays</span>
+                    </h1>
+                    <p class="hero-description">
+                        Empowering CALA officers, Ministry of Railways, and NHAI engineers with machine learning to
+                        identify legal gridlocks, title disputes, and Section 3C/15 public objections up to 18 months
+                        before project execution bottlenecks occur.
+                    </p>
+                    <!-- Interactive 4-Button Action Cluster -->
+                    <div class="cta-cluster">
+                        <a class="btn-primary-teal" href="/predict">
+                            <i class="bi bi-play-circle-fill"></i> Start Prediction
+                        </a>
+                        <a class="btn-outline-gov" href="/dashboard">
+                            <i class="bi bi-bar-chart-line"></i> Analytics Dashboard
+                        </a>
+                        <a class="btn-outline-gov" href="/map">
+                            <i class="bi bi-map"></i> GIS Map
+                        </a>
+                        <a class="btn-outline-danger-gov" href="/alerts">
+                            <i class="bi bi-bell-fill"></i> High-Risk Alerts
+                        </a>
                     </div>
+                </div>
 
-                    <!-- 2x2 Metric Grid (Spotify Dark Theme Cards) -->
-                    <div class="metric-grid">
-                        <!-- Box 1: Total Assessed -->
-                        <div class="metric-box">
-                            <div class="metric-box-title">
-                                <span>Projects Assessed</span>
-                                <i class="bi bi-folder2-open" style="color: #60A5FA;"></i>
-                            </div>
-                            <div class="metric-box-val">
-                                1,428
-                            </div>
-                            <div style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #60A5FA;">
-                                <i class="bi bi-graph-up-arrow"></i>
-                                <span>+14 new this week</span>
-                            </div>
-                        </div>
-
-                        <!-- Box 2: High Risk Alerts -->
-                        <div class="metric-box">
-                            <div class="metric-box-title">
-                                <span>High-Risk Flags</span>
-                                <span class="pulsing-red-dot" title="Active Critical Alerts"></span>
-                            </div>
-                            <div class="metric-box-val">
-                                84
-                            </div>
-                            <div style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #F87171;">
-                                <i class="bi bi-shield-exclamation"></i>
-                                <span>&gt;12 mos. delay risk</span>
-                            </div>
-                        </div>
-
-                        <!-- Box 3: Medium Risk Cases -->
-                        <div class="metric-box">
-                            <div class="metric-box-title">
-                                <span>Medium Risk Cases</span>
-                                <i class="bi bi-exclamation-triangle" style="color: #FBBF24;"></i>
-                            </div>
-                            <div class="metric-box-val">
-                                312
-                            </div>
-                            <div style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #FBBF24;">
-                                <i class="bi bi-clock-history"></i>
-                                <span>3-6 mos. variance</span>
-                            </div>
-                        </div>
-
-                        <!-- Box 4: Low Risk Projects -->
-                        <div class="metric-box">
-                            <div class="metric-box-title">
-                                <span>Low Risk (On-Track)</span>
-                                <i class="bi bi-check-circle" style="color: #1ED760;"></i>
-                            </div>
-                            <div class="metric-box-val">
-                                1,032
-                            </div>
-                            <div style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #1ED760;">
-                                <i class="bi bi-check2-circle"></i>
-                                <span>72.3% of corridor</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card Bottom Telemetry Bar -->
-                    <div class="monitor-card-footer">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-cpu-fill" style="color: #1ED760; font-size: 1.05rem;"></i>
+                <!-- Right Column: Real-Time Live Telemetry HUD Card -->
+                <div class="col-lg-5 col-xl-5">
+                    <div class="glass-monitor-card">
+                        <!-- HUD Header -->
+                        <div class="monitor-card-header">
                             <div>
-                                <div style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF; line-height: 1.2;">Dual XGBoost Ensemble (v1.5)</div>
-                                <div style="font-size: 0.7rem; color: #A7A7A7;">Calibrated Regressor + Active Self-Retraining</div>
+                                <div class="monitor-header-title">
+                                    <i class="bi bi-speedometer2" style="color: #1ED760;"></i>
+                                    <span>Real-time Telemetry Feed</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: #A7A7A7; margin-top: 0.2rem;">
+                                    CALA Infrastructure Grid • Live Sync 18ms
+                                </div>
+                            </div>
+                            <div class="live-pulse-badge">
+                                <span class="live-dot"></span>
+                                <span>Active 99.9%</span>
                             </div>
                         </div>
-                        <div class="accuracy-pill">
-                            95.3% R² 0.981
+
+                        <!-- 2x2 Metric Grid (Spotify Dark Theme Cards) -->
+                        <div class="metric-grid">
+                            <!-- Box 1: Total Assessed -->
+                            <div class="metric-box">
+                                <div class="metric-box-title">
+                                    <span>Projects Assessed</span>
+                                    <i class="bi bi-folder2-open" style="color: #60A5FA;"></i>
+                                </div>
+                                <div class="metric-box-val">
+                                    1,428
+                                </div>
+                                <div
+                                    style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #60A5FA;">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    <span>+14 new this week</span>
+                                </div>
+                            </div>
+
+                            <!-- Box 2: High Risk Alerts -->
+                            <div class="metric-box">
+                                <div class="metric-box-title">
+                                    <span>High-Risk Flags</span>
+                                    <span class="pulsing-red-dot" title="Active Critical Alerts"></span>
+                                </div>
+                                <div class="metric-box-val">
+                                    84
+                                </div>
+                                <div
+                                    style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #F87171;">
+                                    <i class="bi bi-shield-exclamation"></i>
+                                    <span>&gt;12 mos. delay risk</span>
+                                </div>
+                            </div>
+
+                            <!-- Box 3: Medium Risk Cases -->
+                            <div class="metric-box">
+                                <div class="metric-box-title">
+                                    <span>Medium Risk Cases</span>
+                                    <i class="bi bi-exclamation-triangle" style="color: #FBBF24;"></i>
+                                </div>
+                                <div class="metric-box-val">
+                                    312
+                                </div>
+                                <div
+                                    style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #FBBF24;">
+                                    <i class="bi bi-clock-history"></i>
+                                    <span>3-6 mos. variance</span>
+                                </div>
+                            </div>
+
+                            <!-- Box 4: Low Risk Projects -->
+                            <div class="metric-box">
+                                <div class="metric-box-title">
+                                    <span>Low Risk (On-Track)</span>
+                                    <i class="bi bi-check-circle" style="color: #1ED760;"></i>
+                                </div>
+                                <div class="metric-box-val">
+                                    1,032
+                                </div>
+                                <div
+                                    style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #1ED760;">
+                                    <i class="bi bi-check2-circle"></i>
+                                    <span>72.3% of corridor</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Bottom Telemetry Bar -->
+                        <div class="monitor-card-footer">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-cpu-fill" style="color: #1ED760; font-size: 1.05rem;"></i>
+                                <div>
+                                    <div
+                                        style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF; line-height: 1.2;">
+                                        Dual XGBoost Ensemble (v1.5)</div>
+                                    <div style="font-size: 0.7rem; color: #A7A7A7;">Calibrated Regressor + Active
+                                        Self-Retraining</div>
+                                </div>
+                            </div>
+                            <div class="accuracy-pill">
+                                95.3% R² 0.981
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Live Corridor Telemetry Ticker Strip -->
+    <div class="live-ticker-strip text-center">
+        <div class="container-fluid container-xxl d-flex flex-wrap align-items-center justify-content-center text-center"
+            style="column-gap: 1.25rem; row-gap: 0.2rem;">
+            <div class="d-flex align-items-center justify-content-center gap-2">
+                <span class="badge"
+                    style="background: rgba(30, 215, 96, 0.15); color: #1ED760; border: 1px solid rgba(30, 215, 96, 0.35); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.22rem 0.6rem; border-radius: 500px;">Live
+                    Corridor Feed</span>
+                <span style="color: #E2E8F0; font-weight: 500; font-size: 0.81rem;">NHAI Corridor 14B Rohtak-Sonipat
+                    clearance telemetry synchronized</span>
+            </div>
+            <span class="text-secondary d-none d-lg-inline opacity-50">•</span>
+            <div class="d-flex flex-wrap align-items-center justify-content-center gap-3 gap-lg-4"
+                style="font-size: 0.76rem; color: #A7A7A7;">
+                <span><i class="bi bi-check-circle-fill text-success me-1"></i> Section 3C/15 Objection Queue: <strong
+                        class="text-white">Low Latency</strong></span>
+                <span><i class="bi bi-shield-check me-1" style="color: #1ED760;"></i> Model Accuracy (v1.5): <strong
+                        class="text-white">95.3%</strong></span>
+                <span><i class="bi bi-geo-alt-fill text-warning me-1"></i> Geo-Boundaries: <strong
+                        class="text-white">Updated Today</strong></span>
             </div>
         </div>
     </div>
-</header>
 
-<!-- Live Corridor Telemetry Ticker Strip -->
-<div class="live-ticker-strip text-center">
-    <div class="container-fluid container-xxl d-flex flex-wrap align-items-center justify-content-center text-center" style="column-gap: 1.25rem; row-gap: 0.2rem;">
-        <div class="d-flex align-items-center justify-content-center gap-2">
-            <span class="badge" style="background: rgba(30, 215, 96, 0.15); color: #1ED760; border: 1px solid rgba(30, 215, 96, 0.35); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.22rem 0.6rem; border-radius: 500px;">Live Corridor Feed</span>
-            <span style="color: #E2E8F0; font-weight: 500; font-size: 0.81rem;">NHAI Corridor 14B Rohtak-Sonipat clearance telemetry synchronized</span>
-        </div>
-        <span class="text-secondary d-none d-lg-inline opacity-50">•</span>
-        <div class="d-flex flex-wrap align-items-center justify-content-center gap-3 gap-lg-4" style="font-size: 0.76rem; color: #A7A7A7;">
-            <span><i class="bi bi-check-circle-fill text-success me-1"></i> Section 3C/15 Objection Queue: <strong class="text-white">Low Latency</strong></span>
-            <span><i class="bi bi-shield-check me-1" style="color: #1ED760;"></i> Model Accuracy (v1.5): <strong class="text-white">95.3%</strong></span>
-            <span><i class="bi bi-geo-alt-fill text-warning me-1"></i> Geo-Boundaries: <strong class="text-white">Updated Today</strong></span>
-        </div>
-    </div>
-</div>
-
-<!-- D. Core Architecture & Workflow Section -->
-<section class="section-architecture text-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <span class="section-tag">Intelligent Workflow</span>
-                <h2 class="section-heading">How Early Delay Detection Works</h2>
-                <p class="section-subtext">
-                    End-to-end predictive pipeline integrating geospatial land metrics, statutory objection logs, and automated CALA intervention protocols.
-                </p>
-            </div>
-        </div>
-
-        <div class="row g-4 text-start justify-content-center mb-5">
-            <!-- Card 1: Comprehensive Input -->
-            <div class="col-md-6 col-lg-4">
-                <div class="arch-card">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-                        <div class="icon-wrapper-circle icon-blue">
-                            <i class="bi bi-input-cursor-text"></i>
-                        </div>
-                        <span class="badge" style="background: rgba(255, 255, 255, 0.08); color: #E5E5E5; border: 1px solid rgba(255, 255, 255, 0.14); font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 500px; letter-spacing: 0.05em;">STAGE 01</span>
-                    </div>
-                    <h3 class="arch-card-title">Comprehensive Input</h3>
-                    <p class="arch-card-desc">
-                        Ingests granular land records including parcel boundaries (Acres/Ha), individual & joint title holdings, historical litigations, and Section 3C/15 statutory public objections into structured feature matrices.
+    <!-- D. Core Architecture & Workflow Section -->
+    <section class="section-architecture text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <span class="section-tag">Intelligent Workflow</span>
+                    <h2 class="section-heading">How Early Delay Detection Works</h2>
+                    <p class="section-subtext">
+                        End-to-end predictive pipeline integrating geospatial land metrics, statutory objection logs,
+                        and automated CALA intervention protocols.
                     </p>
-                    <div class="arch-pill-list">
-                        <span class="arch-pill-item"><i class="bi bi-geo me-1" style="color: #1ED760;"></i> Parcel Topography</span>
-                        <span class="arch-pill-item"><i class="bi bi-people me-1" style="color: #1ED760;"></i> Title Holdings</span>
-                        <span class="arch-pill-item"><i class="bi bi-file-earmark-ruled me-1" style="color: #1ED760;"></i> Sec 3C/15 Objections</span>
+                </div>
+            </div>
+
+            <div class="row g-4 text-start justify-content-center mb-5">
+                <!-- Card 1: Comprehensive Input -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="arch-card">
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                            <div class="icon-wrapper-circle icon-blue">
+                                <i class="bi bi-input-cursor-text"></i>
+                            </div>
+                            <span class="badge"
+                                style="background: rgba(255, 255, 255, 0.08); color: #E5E5E5; border: 1px solid rgba(255, 255, 255, 0.14); font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 500px; letter-spacing: 0.05em;">STAGE
+                                01</span>
+                        </div>
+                        <h3 class="arch-card-title">Comprehensive Input</h3>
+                        <p class="arch-card-desc">
+                            Ingests granular land records including parcel boundaries (Acres/Ha), individual & joint
+                            title holdings, historical litigations, and Section 3C/15 statutory public objections into
+                            structured feature matrices.
+                        </p>
+                        <div class="arch-pill-list">
+                            <span class="arch-pill-item"><i class="bi bi-geo me-1" style="color: #1ED760;"></i> Parcel
+                                Topography</span>
+                            <span class="arch-pill-item"><i class="bi bi-people me-1" style="color: #1ED760;"></i> Title
+                                Holdings</span>
+                            <span class="arch-pill-item"><i class="bi bi-file-earmark-ruled me-1"
+                                    style="color: #1ED760;"></i> Sec 3C/15 Objections</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Dual-Engine ML Prediction -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="arch-card">
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                            <div class="icon-wrapper-circle icon-green">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                            <span class="badge"
+                                style="background: rgba(30, 215, 96, 0.15); color: #1ED760; border: 1px solid rgba(30, 215, 96, 0.35); font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 500px; letter-spacing: 0.05em;">STAGE
+                                02 • CORE</span>
+                        </div>
+                        <h3 class="arch-card-title">Dual-Engine ML Prediction</h3>
+                        <p class="arch-card-desc">
+                            Runs an ensemble XGBoost architecture executing dual inference: a regressor outputting
+                            continuous delay month forecasts (R² = 0.98) and a multi-class probability classifier
+                            tiering Low, Medium, and High risks.
+                        </p>
+                        <div class="arch-pill-list">
+                            <span class="arch-pill-item"><i class="bi bi-graph-up-arrow me-1"
+                                    style="color: #1ED760;"></i> R² = 0.981 Regression</span>
+                            <span class="arch-pill-item"><i class="bi bi-layers me-1" style="color: #1ED760;"></i>
+                                3-Tier Classification</span>
+                            <span class="arch-pill-item"><i class="bi bi-lightning-charge me-1"
+                                    style="color: #1ED760;"></i> Real-time Scoring</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Actionable Prevention -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="arch-card">
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                            <div class="icon-wrapper-circle icon-red">
+                                <i class="bi bi-shield-exclamation"></i>
+                            </div>
+                            <span class="badge"
+                                style="background: rgba(248, 113, 113, 0.14); color: #FCA5A5; border: 1px solid rgba(248, 113, 113, 0.3); font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 500px; letter-spacing: 0.05em;">STAGE
+                                03</span>
+                        </div>
+                        <h3 class="arch-card-title">Actionable Prevention</h3>
+                        <p class="arch-card-desc">
+                            Prescriptive mitigation intelligence triggering statutory protocols, Section 64 fast-track
+                            legal hearings, priority arbitration escalations, and automated compensation fund escrow
+                            clearance timelines.
+                        </p>
+                        <div class="arch-pill-list">
+                            <span class="arch-pill-item"><i class="bi bi-briefcase me-1" style="color: #1ED760;"></i>
+                                CALA Mitigation</span>
+                            <span class="arch-pill-item"><i class="bi bi-journal-check me-1"
+                                    style="color: #1ED760;"></i> Section 64 Expedited</span>
+                            <span class="arch-pill-item"><i class="bi bi-cash-stack me-1" style="color: #1ED760;"></i>
+                                Escrow Settlement</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2: Dual-Engine ML Prediction -->
-            <div class="col-md-6 col-lg-4">
-                <div class="arch-card">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-                        <div class="icon-wrapper-circle icon-green">
-                            <i class="bi bi-cpu"></i>
-                        </div>
-                        <span class="badge" style="background: rgba(30, 215, 96, 0.15); color: #1ED760; border: 1px solid rgba(30, 215, 96, 0.35); font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 500px; letter-spacing: 0.05em;">STAGE 02 • CORE</span>
-                    </div>
-                    <h3 class="arch-card-title">Dual-Engine ML Prediction</h3>
-                    <p class="arch-card-desc">
-                        Runs an ensemble XGBoost architecture executing dual inference: a regressor outputting continuous delay month forecasts (R² = 0.98) and a multi-class probability classifier tiering Low, Medium, and High risks.
-                    </p>
-                    <div class="arch-pill-list">
-                        <span class="arch-pill-item"><i class="bi bi-graph-up-arrow me-1" style="color: #1ED760;"></i> R² = 0.981 Regression</span>
-                        <span class="arch-pill-item"><i class="bi bi-layers me-1" style="color: #1ED760;"></i> 3-Tier Classification</span>
-                        <span class="arch-pill-item"><i class="bi bi-lightning-charge me-1" style="color: #1ED760;"></i> Real-time Scoring</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Actionable Prevention -->
-            <div class="col-md-6 col-lg-4">
-                <div class="arch-card">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-                        <div class="icon-wrapper-circle icon-red">
-                            <i class="bi bi-shield-exclamation"></i>
-                        </div>
-                        <span class="badge" style="background: rgba(248, 113, 113, 0.14); color: #FCA5A5; border: 1px solid rgba(248, 113, 113, 0.3); font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 500px; letter-spacing: 0.05em;">STAGE 03</span>
-                    </div>
-                    <h3 class="arch-card-title">Actionable Prevention</h3>
-                    <p class="arch-card-desc">
-                        Prescriptive mitigation intelligence triggering statutory protocols, Section 64 fast-track legal hearings, priority arbitration escalations, and automated compensation fund escrow clearance timelines.
-                    </p>
-                    <div class="arch-pill-list">
-                        <span class="arch-pill-item"><i class="bi bi-briefcase me-1" style="color: #1ED760;"></i> CALA Mitigation</span>
-                        <span class="arch-pill-item"><i class="bi bi-journal-check me-1" style="color: #1ED760;"></i> Section 64 Expedited</span>
-                        <span class="arch-pill-item"><i class="bi bi-cash-stack me-1" style="color: #1ED760;"></i> Escrow Settlement</span>
-                    </div>
+            <!-- Bottom Center Call-to-Action -->
+            <div class="mt-4">
+                <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                    <a class="btn-launch-assessment" href="/predict">
+                        <i class="bi bi-lightning-charge-fill me-1"></i>
+                        <span>Launch Assessment Form Now</span>
+                        <i class="bi bi-arrow-right-circle fs-5"></i>
+                    </a>
+                    <span style="font-size: 0.825rem; color: #A7A7A7;">Takes &lt; 3 minutes • Instant ML Duration
+                        Forecasting &amp; Risk Classification</span>
                 </div>
             </div>
         </div>
-
-        <!-- Bottom Center Call-to-Action -->
-        <div class="mt-4">
-            <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.75rem;">
-                <a class="btn-launch-assessment" href="/predict">
-                    <i class="bi bi-lightning-charge-fill me-1"></i>
-                    <span>Launch Assessment Form Now</span>
-                    <i class="bi bi-arrow-right-circle fs-5"></i>
-                </a>
-                <span style="font-size: 0.825rem; color: #A7A7A7;">Takes &lt; 3 minutes • Instant ML Duration Forecasting &amp; Risk Classification</span>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>

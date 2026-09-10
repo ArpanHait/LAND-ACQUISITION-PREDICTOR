@@ -9,16 +9,15 @@ let memoryCases = [];
 // 1. Home Page (GET /)
 router.get('/', async (req, res) => {
     try {
-        let totalCases = 0;
-        let highRisk = 0;
-        let mediumRisk = 0;
-        let lowRisk = 0;
+        let totalCases = 0, highRisk = 0, mediumRisk = 0, lowRisk = 0;
 
         try {
-            totalCases = await Case.countDocuments();
-            highRisk = await Case.countDocuments({ risk_level: 'High' });
-            mediumRisk = await Case.countDocuments({ risk_level: 'Medium' });
-            lowRisk = await Case.countDocuments({ risk_level: 'Low' });
+            [totalCases, highRisk, mediumRisk, lowRisk] = await Promise.all([
+                Case.countDocuments(),
+                Case.countDocuments({ risk_level: 'High' }),
+                Case.countDocuments({ risk_level: 'Medium' }),
+                Case.countDocuments({ risk_level: 'Low' })
+            ]);
         } catch (dbErr) {
             totalCases = memoryCases.length;
             highRisk = memoryCases.filter(c => c.risk_level === 'High').length;
@@ -123,23 +122,40 @@ router.post('/predict', async (req, res) => {
     }
 });
 
-// 4. View History (GET /history)
+// 4. View History (GET /history) with Fast Pagination & Lean Queries
 router.get('/history', async (req, res) => {
     try {
+        const page = Math.max(1, parseInt(req.query.page) || 1);
+        const limit = 30;
         let cases = [];
+        let totalRecords = 0;
+
         try {
-            cases = await Case.find().sort({ createdAt: -1 });
+            [totalRecords, cases] = await Promise.all([
+                Case.countDocuments(),
+                Case.find()
+                    .sort({ createdAt: -1 })
+                    .skip((page - 1) * limit)
+                    .limit(limit)
+                    .lean()
+            ]);
         } catch (dbErr) {
-            cases = memoryCases;
+            totalRecords = memoryCases.length;
+            cases = memoryCases.slice((page - 1) * limit, page * limit);
         }
+
+        const totalPages = Math.ceil(totalRecords / limit) || 1;
 
         res.render('listing/history', {
             title: 'Historical Case Assessments',
-            cases: cases
+            cases,
+            currentPage: page,
+            totalPages,
+            totalRecords
         });
     } catch (err) {
         console.error(err);
-        res.render('listing/history', { title: 'Historical Case Assessments', cases: [] });
+        res.render('listing/history', { title: 'Historical Case Assessments', cases: [], currentPage: 1, totalPages: 1, totalRecords: 0 });
     }
 });
 
@@ -148,7 +164,7 @@ router.get('/history/:id', async (req, res) => {
     try {
         let caseItem = null;
         try {
-            caseItem = await Case.findById(req.params.id);
+            caseItem = await Case.findById(req.params.id).lean();
         } catch (dbErr) {
             caseItem = memoryCases.find(c => c._id == req.params.id);
         }
@@ -182,13 +198,12 @@ router.post('/history/:id/delete', async (req, res) => {
     }
 });
 
-
 // Direct view for latest or sample assessment (GET /show)
 router.get('/show', async (req, res) => {
     try {
         let latest = null;
         try {
-            latest = await Case.findOne().sort({ createdAt: -1 });
+            latest = await Case.findOne().sort({ createdAt: -1 }).lean();
         } catch (e) {
             latest = memoryCases[0];
         }
@@ -206,7 +221,12 @@ router.get('/dashboard', async (req, res) => {
     try {
         let allCases = [];
         try {
-            allCases = await Case.find().sort({ createdAt: -1 });
+            allCases = await Case.find({}, {
+                risk_level: 1, delay_probability: 1, state: 1, project_type: 1,
+                land_notified_percent: 1, award_completed_percent: 1,
+                compensation_disbursed_percent: 1, possession_completed_percent: 1,
+                top_risk_factors: 1, case_id: 1, project_name: 1, _id: 1
+            }).sort({ createdAt: -1 }).lean();
         } catch (e) {
             allCases = memoryCases;
         }
@@ -271,12 +291,12 @@ router.get('/dashboard', async (req, res) => {
         };
         allCases.forEach(c => {
             (c.top_risk_factors || []).forEach(f => {
-                if (f.includes('court') || f.includes('Court')) factorKeywords['Court Litigation']++;
-                if (f.includes('title') || f.includes('Title')) factorKeywords['Title Dispute']++;
-                if (f.includes('objection') || f.includes('Objection')) factorKeywords['Public Objections']++;
-                if (f.includes('fund') || f.includes('fund')) factorKeywords['Funding Pending']++;
-                if (f.includes('possession') || f.includes('Possession')) factorKeywords['Possession Lag']++;
-                if (f.includes('village') || f.includes('Village')) factorKeywords['Multi-Village Jurisdiction']++;
+                if (f && (f.includes('court') || f.includes('Court'))) factorKeywords['Court Litigation']++;
+                if (f && (f.includes('title') || f.includes('Title'))) factorKeywords['Title Dispute']++;
+                if (f && (f.includes('objection') || f.includes('Objection'))) factorKeywords['Public Objections']++;
+                if (f && (f.includes('fund') || f.includes('Fund'))) factorKeywords['Funding Pending']++;
+                if (f && (f.includes('possession') || f.includes('Possession'))) factorKeywords['Possession Lag']++;
+                if (f && (f.includes('village') || f.includes('Village'))) factorKeywords['Multi-Village Jurisdiction']++;
             });
         });
         const sortedFactors = Object.entries(factorKeywords).sort((a, b) => b[1] - a[1]);
@@ -315,7 +335,7 @@ router.get('/map', async (req, res) => {
                 project_type: 1, risk_level: 1, delay_probability: 1,
                 delay_probability_percent: 1, days_since_case_opened: 1,
                 top_risk_factors: 1, recommended_preventive_actions: 1, _id: 1
-            }).sort({ createdAt: -1 });
+            }).sort({ createdAt: -1 }).lean();
         } catch (e) {
             mapCases = memoryCases;
         }
@@ -331,9 +351,14 @@ router.get('/alerts', async (req, res) => {
     try {
         let alerts = [];
         try {
-            alerts = await Case.find({ risk_level: 'High' }).sort({ delay_probability: -1 });
+            alerts = await Case.find({ risk_level: 'High' }, {
+                case_id: 1, project_name: 1, state: 1, district_type: 1, project_type: 1,
+                risk_level: 1, delay_probability: 1, delay_probability_percent: 1,
+                top_risk_factors: 1, recommended_preventive_actions: 1, land_area_acres: 1,
+                land_area_hectares: 1, days_since_case_opened: 1, _id: 1
+            }).sort({ delay_probability: -1 }).limit(60).lean();
         } catch (e) {
-            alerts = memoryCases.filter(c => c.risk_level === 'High');
+            alerts = memoryCases.filter(c => c.risk_level === 'High').slice(0, 60);
         }
         res.render('listing/alerts', { title: `High-Risk Alerts (${alerts.length})`, alerts });
     } catch (err) {

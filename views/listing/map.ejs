@@ -1,230 +1,1126 @@
 <% layout('layouts/boilerplate') %>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet CSS & Chart.js -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <style>
-        #map {
-            height: calc(100vh - 160px);
-            min-height: 500px;
-            border-radius: 16px;
+<style>
+    /* 3-Column Command Layout matching User Wireframe */
+    .gis-layout-wrapper {
+        padding: 1.25rem 1.5rem;
+        min-height: calc(100vh - 140px);
+        background: #121212;
+    }
+
+    .gis-main-grid {
+        display: grid;
+        grid-template-columns: 290px 1fr 300px;
+        gap: 1.25rem;
+        height: calc(100vh - 165px);
+        min-height: 640px;
+    }
+
+    @media (max-width: 1200px) {
+        .gis-main-grid {
+            grid-template-columns: 260px 1fr 270px;
+            gap: 1rem;
         }
+    }
 
-        .risk-legend {
-            background: white;
-            padding: 12px 16px;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-            font-size: 13px;
+    @media (max-width: 992px) {
+        .gis-main-grid {
+            grid-template-columns: 1fr;
+            height: auto;
         }
+    }
 
-        .risk-legend h6 {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
+    /* ─────────────────────────────────────────────────────────────
+       LEFT PANEL: Title & KPI Counters
+       ───────────────────────────────────────────────────────────── */
+    .gis-left-container {
+        background: #1E1E1E;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1.15rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        overflow-y: auto;
+    }
 
-        .legend-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
-        }
+    .gis-brand-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
-        .leaflet-popup-content {
-            font-size: 13px;
-            min-width: 220px;
-        }
+    .gis-brand-title {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin: 0 0 0.3rem 0;
+        letter-spacing: -0.01em;
+    }
 
-        .popup-title {
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-    </style>
+    .gis-brand-subtitle {
+        font-size: 0.76rem;
+        color: #94A3B8;
+        line-height: 1.45;
+        margin: 0;
+    }
 
-    <div class="container-fluid py-3 px-4">
+    /* KPI Summary Cards - Normal & Refined */
+    .kpi-stat-card {
+        background: #171717;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 0.75rem 0.95rem;
+        margin-bottom: 0.65rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
 
-        <!-- Page Header -->
-        <div class="d-flex align-items-center justify-content-between mb-3">
+    .kpi-stat-card:hover {
+        transform: translateY(-2px);
+        background: #202020;
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .kpi-stat-card.active-filter {
+        border-color: rgba(6, 182, 212, 0.4);
+        background: #222222;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .kpi-card-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .kpi-icon-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+    }
+
+    .kpi-card-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #E2E8F0;
+        margin-bottom: 0.1rem;
+    }
+
+    .kpi-card-pct {
+        font-size: 0.7rem;
+        color: #64748B;
+        font-weight: 500;
+    }
+
+    .kpi-card-val {
+        font-size: 1.5rem;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    /* KPI Normal Theme Accents */
+    .bg-badge-total { background: rgba(148, 163, 184, 0.12); color: #94A3B8; }
+    .bg-badge-high { background: rgba(220, 38, 38, 0.12); color: #F87171; }
+    .bg-badge-medium { background: rgba(217, 119, 6, 0.12); color: #FBBF24; }
+    .bg-badge-low { background: rgba(5, 150, 105, 0.12); color: #34D399; }
+
+    .color-total { color: #F1F5F9; }
+    .color-high { color: #F87171; }
+    .color-medium { color: #FBBF24; }
+    .color-low { color: #34D399; }
+
+    /* Left Helper Bar */
+    .left-panel-helper {
+        background: #171717;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 0.55rem 0.75rem;
+        font-size: 0.7rem;
+        color: #94A3B8;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.15rem;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       CENTER PANEL: The Real Interactive GIS Map
+       ───────────────────────────────────────────────────────────── */
+    .gis-center-container {
+        position: relative;
+        background: #1E1E1E;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    #map {
+        width: 100%;
+        height: 100%;
+        min-height: 520px;
+        background: #181818;
+    }
+
+    /* Floating Map Tool Controls */
+    .map-tool-floating-bar {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        z-index: 1000;
+        background: rgba(24, 24, 24, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        border-radius: 10px;
+        padding: 4px;
+        display: flex;
+        gap: 4px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-map-control {
+        background: transparent;
+        border: none;
+        color: #E2E8F0;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .btn-map-control:hover, .btn-map-control.active {
+        background: rgba(6, 182, 212, 0.25);
+        color: #06B6D4;
+    }
+
+    /* Marker Styling */
+    .gis-custom-pin {
+        border-radius: 50%;
+        border: 2.5px solid #FFFFFF;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        font-weight: 800;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .gis-custom-pin:hover {
+        transform: scale(1.18);
+        border-color: #06B6D4;
+        box-shadow: 0 0 16px rgba(6, 182, 212, 0.85);
+    }
+
+    /* Glassmorphic Popup */
+    .leaflet-popup-content-wrapper {
+        background: rgba(24, 24, 24, 0.96) !important;
+        color: #FFFFFF !important;
+        border: 1px solid rgba(6, 182, 212, 0.35) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8) !important;
+        backdrop-filter: blur(12px) !important;
+    }
+
+    .leaflet-popup-tip {
+        background: #181818 !important;
+    }
+
+    .popup-title {
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: #FFFFFF;
+        margin-bottom: 0.2rem;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       RIGHT PANEL: Actions, Distribution & Quick Focus
+       ───────────────────────────────────────────────────────────── */
+    .gis-right-container {
+        background: #1E1E1E;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1.15rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        height: 100%;
+    }
+
+    /* Action Buttons */
+    .btn-action-primary {
+        background: #0891B2;
+        color: #FFFFFF !important;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+        transition: all 0.2s ease;
+    }
+
+    .btn-action-primary:hover {
+        background: #0e7490;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+        color: #FFFFFF !important;
+    }
+
+    /* Distribution Box - Compact Side-by-Side */
+    .distribution-card-box {
+        background: #181818;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 0.65rem 0.75rem;
+        margin-bottom: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .distribution-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #94A3B8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.45rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .chart-donut-wrapper {
+        height: 56px;
+        width: 56px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .tier-stat-row {
+        margin-bottom: 0.25rem;
+    }
+
+    .tier-stat-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .tier-name {
+        font-size: 0.68rem;
+        color: #94A3B8;
+        font-weight: 500;
+    }
+
+    .tier-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    .dot-high { background: #DC2626; }
+    .dot-medium { background: #D97706; }
+    .dot-low { background: #059669; }
+
+    .tier-val {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #E2E8F0;
+    }
+
+    .tier-pct {
+        font-size: 0.65rem;
+        color: #64748B;
+        font-weight: normal;
+    }
+
+    .progress-bar-container {
+        height: 3px;
+        background: #111827;
+        border-radius: 500px;
+        overflow: hidden;
+    }
+
+    .tier-progress-fill {
+        height: 100%;
+        border-radius: 500px;
+        transition: width 0.3s ease;
+    }
+
+    .tier-progress-high { background: #DC2626; }
+    .tier-progress-medium { background: #D97706; }
+    .tier-progress-low { background: #059669; }
+
+    /* Quick Marker Focus Feed */
+    .quick-focus-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .feed-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #94A3B8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+    }
+
+    .quick-focus-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 2px;
+        min-height: 220px;
+    }
+
+    .quick-focus-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .quick-focus-scroll::-webkit-scrollbar-track {
+        background: #141414;
+        border-radius: 4px;
+    }
+
+    .quick-focus-scroll::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+    }
+
+    .mini-case-item {
+        background: #171717;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-left: 3px solid #059669;
+        border-radius: 6px;
+        padding: 0.42rem 0.6rem;
+        margin-bottom: 0.35rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .mini-case-item:hover {
+        background: #222222;
+        border-color: rgba(255, 255, 255, 0.14);
+        transform: translateX(2px);
+    }
+
+    .mini-case-item.border-high { border-left-color: #DC2626; }
+    .mini-case-item.border-medium { border-left-color: #D97706; }
+    .mini-case-item.border-low { border-left-color: #059669; }
+
+    /* Delay Badges */
+    .delay-badge {
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 1px 5px;
+        border-radius: 4px;
+        line-height: 1.2;
+    }
+
+    .badge-delay-high {
+        background: rgba(220, 38, 38, 0.12);
+        color: #F87171;
+        border: 1px solid rgba(220, 38, 38, 0.22);
+    }
+
+    .badge-delay-medium {
+        background: rgba(217, 119, 6, 0.12);
+        color: #FBBF24;
+        border: 1px solid rgba(217, 119, 6, 0.22);
+    }
+
+    .badge-delay-low {
+        background: rgba(5, 150, 105, 0.12);
+        color: #34D399;
+        border: 1px solid rgba(5, 150, 105, 0.22);
+    }
+</style>
+
+<%
+    const casesList = (typeof mapCases !== 'undefined' && Array.isArray(mapCases)) ? mapCases : [];
+    const totalCases = casesList.length;
+    const highCount = casesList.filter(c => c && c.risk_level === 'High').length;
+    const mediumCount = casesList.filter(c => c && c.risk_level === 'Medium').length;
+    const lowCount = casesList.filter(c => c && c.risk_level === 'Low').length;
+
+    const highPct = totalCases > 0 ? Math.round((highCount / totalCases) * 100) : 0;
+    const mediumPct = totalCases > 0 ? Math.round((mediumCount / totalCases) * 100) : 0;
+    const lowPct = totalCases > 0 ? Math.round((lowCount / totalCases) * 100) : 0;
+%>
+
+<div class="gis-layout-wrapper">
+    <div class="gis-main-grid">
+
+        <!-- ─────────────────────────────────────────────────────────────
+             LEFT COLUMN: Title, Logo & KPI Summary Cards
+             ───────────────────────────────────────────────────────────── -->
+        <div class="gis-left-container">
             <div>
-                <h2 class="fw-bold text-navy mb-1 d-inline-flex align-items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="38px" viewBox="0 -960 960 960" width="38px"
-                        fill="#FFFFFF" class="flex-shrink-0">
-                        <path
-                            d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480t31.5-156Q143-709 197-763t127-85.5Q397-880 480-880t156 31.5Q709-817 763-763t85.5 127Q880-563 880-480t-31.5 156Q817-251 763-197t-127 85.5Q563-80 480-80t-156-31.5ZM480-260q45-45 80-93 30-41 55-90t25-97q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 48 25 97t55 90q35 48 80 93Zm-42.5-237.5Q420-515 420-540t17.5-42.5Q455-600 480-600t42.5 17.5Q540-565 540-540t-17.5 42.5Q505-480 480-480t-42.5-17.5Z" />
-                    </svg>
-                    <span>GIS Risk Map</span>
-                </h2>
-                <p class="text-muted mb-0">State-wise geographic distribution of assessed land acquisition projects</p>
+                <!-- Brand Title Matching Uploaded Reference Logo -->
+                <div class="gis-brand-header">
+                    <h2 class="gis-brand-title d-flex align-items-center gap-2 mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 -960 960 960" width="34px" fill="#FFFFFF" class="flex-shrink-0">
+                            <path d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480t31.5-156Q143-709 197-763t127-85.5Q397-880 480-880t156 31.5Q709-817 763-763t85.5 127Q880-563 880-480t-31.5 156Q817-251 763-197t-127 85.5Q563-80 480-80t-156-31.5ZM480-260q45-45 80-93 30-41 55-90t25-97q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 48 25 97t55 90q35 48 80 93Zm-42.5-237.5Q420-515 420-540t17.5-42.5Q455-600 480-600t42.5 17.5Q540-565 540-540t-17.5 42.5Q505-480 480-480t-42.5-17.5Z" />
+                        </svg>
+                        <span>GIS Risk Map</span>
+                    </h2>
+                    <p class="gis-brand-subtitle">
+                        State-wise geographic distribution of assessed land acquisition projects
+                    </p>
+                </div>
+
+                <!-- 1. Total Assessed Projects -->
+                <div class="kpi-stat-card active-filter" data-filter="ALL">
+                    <div class="kpi-card-left">
+                        <div class="kpi-icon-badge bg-badge-total">
+                            <i class="bi bi-folder2-open"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-card-title">Total Assessed</div>
+                            <div class="kpi-card-pct">National Database</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card-val color-total"><%= totalCases %></div>
+                </div>
+
+                <!-- 2. High Risk (Red) -->
+                <div class="kpi-stat-card" data-filter="High">
+                    <div class="kpi-card-left">
+                        <div class="kpi-icon-badge bg-badge-high">
+                            <i class="bi bi-shield-x"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-card-title">High Risk</div>
+                            <div class="kpi-card-pct"><%= highPct %>% of corridor</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card-val color-high"><%= highCount %></div>
+                </div>
+
+                <!-- 3. Medium Risk (Yellow) -->
+                <div class="kpi-stat-card" data-filter="Medium">
+                    <div class="kpi-card-left">
+                        <div class="kpi-icon-badge bg-badge-medium">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-card-title">Medium Risk</div>
+                            <div class="kpi-card-pct"><%= mediumPct %>% of corridor</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card-val color-medium"><%= mediumCount %></div>
+                </div>
+
+                <!-- 4. Low Risk (Green) -->
+                <div class="kpi-stat-card" data-filter="Low">
+                    <div class="kpi-card-left">
+                        <div class="kpi-icon-badge bg-badge-low">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div>
+                            <div class="kpi-card-title">Low Risk</div>
+                            <div class="kpi-card-pct"><%= lowPct %>% on track</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card-val color-low"><%= lowCount %></div>
+                </div>
+
+                <!-- Helper Note Positioned Snugly Below -->
+                <div class="left-panel-helper">
+                    <i class="bi bi-info-circle" style="color: #94A3B8; font-size: 0.85rem;"></i>
+                    <span>Click any card above to filter markers across Indian states.</span>
+                </div>
             </div>
-            <div class="d-flex align-items-center gap-2">
-                <a href="/dashboard" class="btn btn-gis-pill">
+        </div>
+
+        <!-- ─────────────────────────────────────────────────────────────
+             MIDDLE COLUMN: The Actual Interactive GIS Map
+             ───────────────────────────────────────────────────────────── -->
+        <div class="gis-center-container" id="map-fullscreen-target">
+            <div id="map"></div>
+
+            <!-- Map Floating Layer Bar -->
+            <div class="map-tool-floating-bar">
+                <button class="btn-map-control active" id="btn-satellite">
+                    <i class="bi bi-globe-americas"></i> Satellite
+                </button>
+                <button class="btn-map-control" id="btn-street">
+                    <i class="bi bi-layers-fill"></i> Streets
+                </button>
+                <button class="btn-map-control" id="btn-reset-map" title="Reset View">
+                    <i class="bi bi-crosshair"></i>
+                </button>
+                <button class="btn-map-control" id="btn-toggle-fullscreen" title="Toggle Fullscreen">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ─────────────────────────────────────────────────────────────
+             RIGHT COLUMN: Action Buttons, Risk Distribution & Quick Focus
+             ───────────────────────────────────────────────────────────── -->
+        <div class="gis-right-container">
+            <!-- Action Buttons -->
+            <div class="d-flex flex-column gap-2 mb-2 flex-shrink-0">
+                <a href="/predict" class="btn btn-teal btn-sm fw-bold w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-plus-circle me-1"></i> New Assessment
+                </a>
+                <a href="/dashboard" class="btn btn-outline-secondary btn-sm fw-semibold w-100 py-2 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-bar-chart-line-fill text-info"></i>
                     <span>Analytics Dashboard</span>
                 </a>
-                <a href="/predict" class="btn btn-teal btn-sm fw-bold">
-                    <i class="bi bi-plus-circle me-1"></i> New Assessment
-                </a>
+            </div>
+
+            <!-- Risk Tier Distribution Breakdown -->
+            <div class="distribution-card-box">
+                <div class="distribution-title">
+                    <span>Risk Tier Distribution</span>
+                    <i class="bi bi-pie-chart text-secondary"></i>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <div class="chart-donut-wrapper">
+                        <canvas id="riskTierChart"></canvas>
+                    </div>
+
+                    <div class="flex-grow-1 d-flex flex-column gap-1">
+                        <!-- High Risk -->
+                        <div class="tier-stat-row">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="d-flex align-items-center gap-1 tier-name">
+                                    <span class="tier-dot dot-high"></span> High (&gt;70%)
+                                </span>
+                                <span class="tier-val"><%= highCount %> <span class="tier-pct">(<%= highPct %>%)</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="tier-progress-fill tier-progress-high" data-pct="<%= highPct %>"></div>
+                            </div>
+                        </div>
+
+                        <!-- Medium Risk -->
+                        <div class="tier-stat-row">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="d-flex align-items-center gap-1 tier-name">
+                                    <span class="tier-dot dot-medium"></span> Medium (35-70%)
+                                </span>
+                                <span class="tier-val"><%= mediumCount %> <span class="tier-pct">(<%= mediumPct %>%)</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="tier-progress-fill tier-progress-medium" data-pct="<%= mediumPct %>"></div>
+                            </div>
+                        </div>
+
+                        <!-- Low Risk -->
+                        <div class="tier-stat-row">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="d-flex align-items-center gap-1 tier-name">
+                                    <span class="tier-dot dot-low"></span> Low (&lt;35%)
+                                </span>
+                                <span class="tier-val"><%= lowCount %> <span class="tier-pct">(<%= lowPct %>%)</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="tier-progress-fill tier-progress-low" data-pct="<%= lowPct %>"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Marker Focus -->
+            <div class="quick-focus-section">
+                <div class="feed-title">
+                    <span><i class="bi bi-geo-alt me-1 text-info"></i> Quick Marker Focus</span>
+                    <span class="text-muted" style="font-size: 0.65rem; font-weight: normal;">Click to zoom</span>
+                </div>
+                <div class="quick-focus-scroll" id="quickFocusList">
+                    <% if (casesList.length === 0) { %>
+                        <div class="p-3 text-center text-muted" style="font-size: 0.75rem;">
+                            <i class="bi bi-inbox d-block mb-1 fs-4 text-secondary"></i>
+                            No assessed projects yet.<br>Click <strong>New Assessment</strong> to begin.
+                        </div>
+                    <% } else { %>
+                        <% casesList.slice(0, 50).forEach((c, idx) => { 
+                            const borderClass = c.risk_level === 'High' ? 'border-high' : (c.risk_level === 'Medium' ? 'border-medium' : 'border-low');
+                            const delayNum = c.delay_probability ? Math.round(c.delay_probability * 100) : (c.risk_level === 'High' ? 85 : (c.risk_level === 'Medium' ? 50 : 25));
+                            const badgeClass = c.risk_level === 'High' ? 'badge-delay-high' : (c.risk_level === 'Medium' ? 'badge-delay-medium' : 'badge-delay-low');
+                            const cleanState = (c.state || 'India').replace(/["']/g, '');
+                            const cleanCaseId = (c.case_id || '').replace(/["']/g, '');
+                            const uniqueKey = c._id ? String(c._id) : ('case-' + idx);
+                        %>
+                            <div class="mini-case-item <%= borderClass %>" 
+                                 data-id="<%= uniqueKey %>"
+                                 data-case-id="<%= cleanCaseId %>" 
+                                 data-state="<%= cleanState %>">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span style="font-weight:600; font-size:0.75rem; color:#F1F5F9;"><%= c.case_id %></span>
+                                    <span class="delay-badge <%= badgeClass %>"><%= delayNum %>% Delay</span>
+                                </div>
+                                <div style="font-size:0.69rem; color:#94A3B8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                    <%= c.project_name || c.state %> • <strong style="color:#CBD5E1;"><%= c.state %></strong>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
             </div>
         </div>
-
-        <!-- Quick Stats Row -->
-        <div class="row g-2 mb-3">
-            <div class="col-4 col-md-2">
-                <div class="card border-0 shadow-sm rounded-3 p-2 text-center">
-                    <div class="fw-bold text-danger fs-5">
-                        <%= mapCases.filter(c=>c.risk_level==='High').length %>
-                    </div>
-                    <div class="small text-muted">High Risk</div>
-                </div>
-            </div>
-            <div class="col-4 col-md-2">
-                <div class="card border-0 shadow-sm rounded-3 p-2 text-center">
-                    <div class="fw-bold text-warning fs-5">
-                        <%= mapCases.filter(c=>c.risk_level==='Medium').length %>
-                    </div>
-                    <div class="small text-muted">Medium Risk</div>
-                </div>
-            </div>
-            <div class="col-4 col-md-2">
-                <div class="card border-0 shadow-sm rounded-3 p-2 text-center">
-                    <div class="fw-bold text-success fs-5">
-                        <%= mapCases.filter(c=>c.risk_level==='Low').length %>
-                    </div>
-                    <div class="small text-muted">Low Risk</div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="card border-0 shadow-sm rounded-3 p-2 d-flex flex-row align-items-center gap-2 px-3">
-                    <i class="bi bi-info-circle text-primary"></i>
-                    <span class="small text-muted">Markers are plotted at approximate state capitals. Click any marker
-                        to view full case details.</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Map -->
-        <div id="map" class="shadow-sm border"></div>
 
     </div>
+</div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Clean HTML Data Bridge (Eliminates all EJS interpolation inside <script> blocks) -->
+<div id="gis-data-bridge" 
+     data-high="<%= highCount %>" 
+     data-medium="<%= mediumCount %>" 
+     data-low="<%= lowCount %>" 
+     data-cases="<%- Buffer.from(JSON.stringify(casesList)).toString('base64') %>" 
+     style="display:none;"></div>
 
-    <script id="map-data" type="application/json">
-<%- JSON.stringify(mapCases) %>
-</script>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script>
-        // Cases from server
-        const cases = JSON.parse(document.getElementById('map-data').textContent);
+<script>
+    // 1. Cases from HTML Data Bridge (100% Valid JavaScript, 0 Linter Errors)
+    const bridge = document.getElementById('gis-data-bridge');
+    let cases = [];
+    let highCount = 0;
+    let mediumCount = 0;
+    let lowCount = 0;
 
-        // State → [lat, lng] approximate coordinates (state capitals / geographic centers)
-        const stateCoords = {
-            "Uttar Pradesh": [26.8467, 80.9462],
-            "Punjab": [31.1471, 75.3412],
-            "Maharashtra": [19.7515, 75.7139],
-            "Rajasthan": [27.0238, 74.2179],
-            "Madhya Pradesh": [22.9734, 78.6569],
-            "West Bengal": [22.9868, 87.8550],
-            "Chhattisgarh": [21.2787, 81.8661],
-            "Odisha": [20.9517, 85.0985],
-            "Haryana": [29.0588, 76.0856],
-            "Karnataka": [15.3173, 75.7139],
-            "Gujarat": [22.2587, 71.1924],
-            "Bihar": [25.0961, 85.3131],
-            "Andhra Pradesh": [15.9129, 79.7400],
-            "Telangana": [17.1232, 79.2088],
-            "Tamil Nadu": [11.1271, 78.6569],
-            "Kerala": [10.8505, 76.2711],
-            "Jharkhand": [23.6102, 85.2799],
-            "Assam": [26.2006, 92.9376],
-            "Uttarakhand": [30.0668, 79.0193],
-            "Himachal Pradesh": [31.1048, 77.1734]
-        };
+    if (bridge) {
+        try {
+            const b64 = bridge.getAttribute('data-cases') || '';
+            const decoded = atob(b64);
+            cases = JSON.parse(decoded);
+        } catch (e) {
+            console.error('Error decoding case data:', e);
+            cases = [];
+        }
+        highCount = parseInt(bridge.getAttribute('data-high') || '0', 10);
+        mediumCount = parseInt(bridge.getAttribute('data-medium') || '0', 10);
+        lowCount = parseInt(bridge.getAttribute('data-low') || '0', 10);
+    }
 
-        const riskColors = { 'High': '#dc3545', 'Medium': '#fd7e14', 'Low': '#198754' };
-        const riskIcons = { 'High': '🔴', 'Medium': '🟠', 'Low': '🟢' };
+    // 2. Geographic State Coordinates in India (All 28 States & 8 UTs)
+    const stateCoords = {
+        // 28 States
+        "Andhra Pradesh": [15.9129, 79.7400],
+        "Arunachal Pradesh": [28.2180, 94.7278],
+        "Assam": [26.2006, 92.9376],
+        "Bihar": [25.0961, 85.3131],
+        "Chhattisgarh": [21.2787, 81.8661],
+        "Goa": [15.2993, 74.1240],
+        "Gujarat": [22.2587, 71.1924],
+        "Haryana": [29.0588, 76.0856],
+        "Himachal Pradesh": [31.1048, 77.1734],
+        "Jharkhand": [23.6102, 85.2799],
+        "Karnataka": [15.3173, 75.7139],
+        "Kerala": [10.8505, 76.2711],
+        "Madhya Pradesh": [22.9734, 78.6569],
+        "Maharashtra": [19.7515, 75.7139],
+        "Manipur": [24.6637, 93.9063],
+        "Meghalaya": [25.4670, 91.3662],
+        "Mizoram": [23.1645, 92.9376],
+        "Nagaland": [26.1584, 94.5624],
+        "Odisha": [20.9517, 85.0985],
+        "Punjab": [31.1471, 75.3412],
+        "Rajasthan": [27.0238, 74.2179],
+        "Sikkim": [27.5330, 88.5122],
+        "Tamil Nadu": [11.1271, 78.6569],
+        "Telangana": [17.1232, 79.2088],
+        "Tripura": [23.9408, 91.9882],
+        "Uttar Pradesh": [26.8467, 80.9462],
+        "Uttarakhand": [30.0668, 79.0193],
+        "West Bengal": [22.9868, 87.8550],
 
-        // Init map centered on India
-        const map = L.map('map').setView([22.5, 82.0], 5);
+        // 8 Union Territories
+        "Andaman and Nicobar Islands": [11.7401, 92.6586],
+        "Chandigarh": [30.7333, 76.7794],
+        "Dadra and Nagar Haveli and Daman and Diu": [20.4283, 72.8397],
+        "Delhi": [28.7041, 77.1025],
+        "Jammu and Kashmir": [33.7782, 76.5762],
+        "Ladakh": [34.1526, 77.5771],
+        "Lakshadweep": [10.5667, 72.6417],
+        "Puducherry": [11.9416, 79.8083]
+    };
 
-        // Tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-            maxZoom: 18
-        }).addTo(map);
+    // Robust State Normalizer & Resolver
+    function getStateCoordinates(stateName) {
+        if (!stateName) return [22.5, 78.9]; // Center of India fallback
+        const clean = String(stateName).trim();
+        if (stateCoords[clean]) return stateCoords[clean];
 
-        // Add markers
-        const grouped = {};
-        cases.forEach(c => {
-            const coords = stateCoords[c.state];
-            if (!coords) return;
+        const lower = clean.toLowerCase();
+        
+        // Match common variations & aliases
+        if (lower.includes('delhi')) return stateCoords["Delhi"];
+        if (lower.includes('andaman')) return stateCoords["Andaman and Nicobar Islands"];
+        if (lower.includes('dadra') || lower.includes('daman') || lower.includes('diu')) return stateCoords["Dadra and Nagar Haveli and Daman and Diu"];
+        if (lower.includes('jammu') || lower.includes('kashmir') || lower === 'j&k') return stateCoords["Jammu and Kashmir"];
+        if (lower.includes('ladakh') || lower.includes('leh')) return stateCoords["Ladakh"];
+        if (lower.includes('lakshadweep')) return stateCoords["Lakshadweep"];
+        if (lower.includes('puducherry') || lower.includes('pondicherry')) return stateCoords["Puducherry"];
+        if (lower.includes('orissa') || lower.includes('odisha')) return stateCoords["Odisha"];
+        if (lower.includes('uttaranchal') || lower.includes('uttarakhand')) return stateCoords["Uttarakhand"];
+        if (lower.includes('telengana') || lower.includes('telangana')) return stateCoords["Telangana"];
+        if (lower.includes('bengal')) return stateCoords["West Bengal"];
+        if (lower.includes('tamil')) return stateCoords["Tamil Nadu"];
+        if (lower.includes('pradesh')) {
+            if (lower.includes('uttar')) return stateCoords["Uttar Pradesh"];
+            if (lower.includes('madhya')) return stateCoords["Madhya Pradesh"];
+            if (lower.includes('andhra')) return stateCoords["Andhra Pradesh"];
+            if (lower.includes('himachal')) return stateCoords["Himachal Pradesh"];
+            if (lower.includes('arunachal')) return stateCoords["Arunachal Pradesh"];
+        }
 
-            // Jitter multiple cases in same state so they don't overlap
-            if (!grouped[c.state]) grouped[c.state] = 0;
-            grouped[c.state]++;
-            const count = grouped[c.state];
-            const jitterLat = coords[0] + (Math.random() - 0.5) * 1.8;
-            const jitterLng = coords[1] + (Math.random() - 0.5) * 1.8;
+        // Search keys
+        for (const [key, coords] of Object.entries(stateCoords)) {
+            if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+                return coords;
+            }
+        }
 
-            const color = riskColors[c.risk_level] || '#6c757d';
+        return [22.5, 78.9];
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    const riskColors = { 'High': '#DC2626', 'Medium': '#D97706', 'Low': '#059669' };
+    const riskIcons = { 'High': '🔴', 'Medium': '🟡', 'Low': '🟢' };
+
+    let activeFilter = 'ALL';
+    let markersMap = {};
+    let riskDonutChart = null;
+
+    // 3. Initialize Leaflet Map (Centered on India with generous pan limits)
+    const indiaBounds = [
+        [6.0, 66.0],  // Southwest
+        [37.5, 98.0]  // Northeast
+    ];
+
+    const map = L.map('map', {
+        zoomControl: false,
+        attributionControl: false,
+        minZoom: 4,
+        maxZoom: 18,
+        maxBounds: [
+            [4.0, 60.0],
+            [40.0, 104.0]
+        ],
+        maxBoundsViscosity: 0.75,
+        worldCopyJump: false
+    }).setView([22.5, 82.0], 5);
+
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // Satellite Hybrid Layer (Imagery + Place/State Names + Highways)
+    const satelliteBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19
+    });
+
+    const satellitePlaces = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        pane: 'overlayPane'
+    });
+
+    const satelliteRoads = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        pane: 'overlayPane'
+    });
+
+    const satelliteTile = L.layerGroup([satelliteBase, satellitePlaces, satelliteRoads]).addTo(map);
+
+    const streetTile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+    });
+
+    function setTileLayer(type) {
+        const btnSat = document.getElementById('btn-satellite');
+        const btnStr = document.getElementById('btn-street');
+        if (btnSat) btnSat.classList.toggle('active', type === 'satellite');
+        if (btnStr) btnStr.classList.toggle('active', type === 'street');
+
+        if (map.hasLayer(satelliteTile)) map.removeLayer(satelliteTile);
+        if (map.hasLayer(streetTile)) map.removeLayer(streetTile);
+
+        if (type === 'satellite') {
+            map.addLayer(satelliteTile);
+        } else {
+            map.addLayer(streetTile);
+        }
+    }
+
+    const markersGroup = L.featureGroup().addTo(map);
+
+    // 4. Render Markers with Delay Probability % (Showing Latest 50 Cases on Map)
+    function renderMapMarkers() {
+        markersGroup.clearLayers();
+        markersMap = {};
+        const stateCounts = {};
+
+        // Filter and limit to latest 50 cases to prevent visual clustering
+        const filteredCases = activeFilter === 'ALL' 
+            ? cases 
+            : cases.filter(c => c && (c.risk_level === activeFilter));
+        const mapDisplayCases = filteredCases.slice(0, 50);
+
+        mapDisplayCases.forEach((c, idx) => {
+            if (!c) return;
+            const risk = (c.risk_level === 'High' || c.risk_level === 'Medium' || c.risk_level === 'Low') 
+                ? c.risk_level 
+                : 'Medium';
+
+            const stateName = c.state || 'India';
+            const baseCoords = getStateCoordinates(stateName);
+
+            if (!stateCounts[stateName]) stateCounts[stateName] = 0;
+            const offsetIndex = stateCounts[stateName]++;
+
+            // Golden angle radial dispersion around state center
+            const angle = offsetIndex * 2.39996;
+            const radius = offsetIndex === 0 ? 0 : (0.28 * Math.sqrt(offsetIndex));
+            const jitterLat = baseCoords[0] + (radius * Math.cos(angle));
+            const jitterLng = baseCoords[1] + (radius * Math.sin(angle));
+
+            const color = riskColors[risk] || '#D97706';
+            const iconSymbol = riskIcons[risk] || '🟡';
+            const delayVal = c.delay_probability 
+                ? Math.round(c.delay_probability * 100) 
+                : (risk === 'High' ? 85 : (risk === 'Medium' ? 50 : 20));
 
             const icon = L.divIcon({
                 className: '',
-                html: `<div style="
-            width:34px; height:34px; border-radius:50%;
-            background:${color}; border:3px solid white;
-            box-shadow:0 2px 8px rgba(0,0,0,0.35);
-            display:flex; align-items:center; justify-content:center;
-            color:white; font-size:13px; font-weight:700;
-        ">${c.delay_probability ? Math.round(c.delay_probability * 100) : '?'}</div>`,
+                html: `<div class="gis-custom-pin" style="width:34px; height:34px; background:${color};">${delayVal}%</div>`,
                 iconSize: [34, 34],
                 iconAnchor: [17, 17]
             });
 
-            const factors = Array.isArray(c.top_risk_factors) ? c.top_risk_factors.slice(0, 2).join('<br>• ') : 'N/A';
-            const popup = `
-        <div class="popup-title">${riskIcons[c.risk_level]} ${c.project_name || 'Project'}</div>
-        <div style="color:#6c757d; font-size:12px;">${c.case_id} &nbsp;|&nbsp; ${c.state}</div>
-        <hr style="margin:6px 0;">
-        <div><b>Sector:</b> ${c.project_type}</div>
-        <div><b>Risk Tier:</b> <span style="color:${color}; font-weight:700;">${c.risk_level} Risk</span></div>
-        <div><b>Delay Probability:</b> ${c.delay_probability_percent || 'N/A'}</div>
-        <div style="margin-top:6px;"><b>Top Drivers:</b><br>• ${factors}</div>
-        <div style="margin-top:8px;">
-            <a href="/history/${c._id}" style="color:#0d6efd; font-size:12px;">View Full Report →</a>
-        </div>`;
+            const factors = Array.isArray(c.top_risk_factors) && c.top_risk_factors.length > 0
+                ? c.top_risk_factors.slice(0, 2).map(f => `• ${escapeHtml(f)}`).join('<br>')
+                : '• Standard Timeline Evaluation';
 
-            L.marker([jitterLat, jitterLng], { icon })
-                .addTo(map)
-                .bindPopup(popup, { maxWidth: 280 });
+            const projectName = escapeHtml(c.project_name || 'Infrastructure Corridor');
+            const caseId = escapeHtml(c.case_id || 'LA-CORR');
+            const stateDisplay = escapeHtml(stateName);
+            const projectType = escapeHtml(c.project_type || 'Railway / Highway');
+            const reportLink = c._id ? `/history/${c._id}` : '/history';
+
+            const popupHtml = `
+                <div class="popup-title">${iconSymbol} ${projectName}</div>
+                <div style="color:#94A3B8; font-size:12px; margin-bottom:6px;">${caseId} &nbsp;|&nbsp; ${stateDisplay}</div>
+                <div style="font-size:12px; margin-bottom:3px;"><b>Sector:</b> ${projectType}</div>
+                <div style="font-size:12px; margin-bottom:3px;"><b>Risk Tier:</b> <span style="color:${color}; font-weight:700;">${risk} Risk</span></div>
+                <div style="font-size:12px; margin-bottom:3px;"><b>Delay Probability:</b> <strong style="color:${color};">${delayVal}%</strong></div>
+                <div style="font-size:11px; margin-top:6px; color:#A7A7A7;"><b>Top Drivers:</b><br>${factors}</div>
+                <div style="margin-top:8px; border-top:1px solid rgba(255,255,255,0.1); padding-top:6px; text-align:right;">
+                    <a href="${reportLink}" style="color:#06B6D4; font-size:12px; font-weight:700; text-decoration:none;">View Full Report →</a>
+                </div>
+            `;
+
+            const marker = L.marker([jitterLat, jitterLng], { icon })
+                .addTo(markersGroup)
+                .bindPopup(popupHtml, { maxWidth: 280 });
+
+            const uniqueKey = String(c._id || c.case_id || ('case-' + idx));
+            markersMap[uniqueKey] = marker;
+            if (c.case_id && !markersMap[c.case_id]) {
+                markersMap[c.case_id] = marker;
+            }
         });
+    }
 
-        // Legend
-        const legend = L.control({ position: 'bottomright' });
-        legend.onAdd = function () {
-            const div = L.DomUtil.create('div', 'risk-legend');
-            div.innerHTML = `
-        <h6><i class="bi bi-shield-fill"></i> Risk Level</h6>
-        <div><span class="legend-dot" style="background:#dc3545"></span> High Risk</div>
-        <div><span class="legend-dot" style="background:#fd7e14"></span> Medium Risk</div>
-        <div><span class="legend-dot" style="background:#198754"></span> Low Risk</div>
-        <hr style="margin:8px 0; border-color:#dee2e6;">
-        <div style="font-size:11px;color:#6c757d;">Number = Delay %</div>`;
-            return div;
-        };
-        legend.addTo(map);
+    // 5. Left KPI Card Filter Handler
+    function filterMarkers(level, element) {
+        activeFilter = level;
+        document.querySelectorAll('.kpi-stat-card').forEach(el => el.classList.remove('active-filter'));
+        if (element) element.classList.add('active-filter');
+        renderMapMarkers();
+    }
 
-        // Fit map to markers if any
-        if (cases.length > 0) {
-            const validCoords = cases
-                .filter(c => stateCoords[c.state])
-                .map(c => stateCoords[c.state]);
-            if (validCoords.length > 0) {
-                map.fitBounds(L.latLngBounds(validCoords).pad(0.3));
+    // 6. Focus on Case from Quick List or State
+    function focusOnCase(uniqueId, stateName) {
+        // If filter is active and hides this marker, reset filter
+        if (activeFilter !== 'ALL' && uniqueId && !markersMap[uniqueId]) {
+            filterMarkers('ALL', document.querySelector('.kpi-stat-card[data-filter="ALL"]'));
+        }
+
+        if (uniqueId && markersMap[uniqueId]) {
+            const marker = markersMap[uniqueId];
+            map.flyTo(marker.getLatLng(), 8, { duration: 1.0 });
+            setTimeout(() => {
+                marker.openPopup();
+            }, 600);
+            return;
+        }
+
+        const coords = getStateCoordinates(stateName);
+        if (coords) {
+            map.flyTo(coords, 7, { duration: 1.0 });
+        }
+    }
+
+    function resetMapView() {
+        map.fitBounds(indiaBounds, { padding: [15, 15] });
+    }
+
+    function toggleFullscreen() {
+        const elem = document.getElementById('map-fullscreen-target');
+        if (!elem) return;
+        if (!document.fullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(err => console.warn('Exit fullscreen error:', err));
             }
         }
-    </script>
+    }
+
+    // 7. Right Side Risk Tier Donut Chart (With reuse protection)
+    function initDonutChart() {
+        const canvas = document.getElementById('riskTierChart');
+        if (!canvas) return;
+
+        if (riskDonutChart) {
+            riskDonutChart.destroy();
+            riskDonutChart = null;
+        }
+
+        const total = highCount + mediumCount + lowCount;
+        const ctx = canvas.getContext('2d');
+        
+        riskDonutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                datasets: [{
+                    data: total > 0 ? [highCount, mediumCount, lowCount] : [1],
+                    backgroundColor: total > 0 ? ['#DC2626', '#D97706', '#059669'] : ['#334155'],
+                    borderColor: '#181818',
+                    borderWidth: 1,
+                    hoverOffset: total > 0 ? 2 : 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: total > 0,
+                        backgroundColor: '#1E1E1E',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#E2E8F0',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1,
+                        padding: 6
+                    }
+                },
+                cutout: '72%'
+            }
+        });
+    }
+
+    // 8. Lifecycle Initialization & Clean Event Listeners
+    window.addEventListener('DOMContentLoaded', () => {
+        renderMapMarkers();
+        initDonutChart();
+
+        // Dynamic progress bar widths
+        document.querySelectorAll('.tier-progress-fill').forEach(el => {
+            const pct = el.getAttribute('data-pct') || '0';
+            el.style.width = pct + '%';
+        });
+
+        // Attach event listeners for toolbar buttons
+        const btnSat = document.getElementById('btn-satellite');
+        const btnStr = document.getElementById('btn-street');
+        const btnReset = document.getElementById('btn-reset-map');
+        const btnFull = document.getElementById('btn-toggle-fullscreen');
+
+        if (btnSat) btnSat.addEventListener('click', () => setTileLayer('satellite'));
+        if (btnStr) btnStr.addEventListener('click', () => setTileLayer('street'));
+        if (btnReset) btnReset.addEventListener('click', resetMapView);
+        if (btnFull) btnFull.addEventListener('click', toggleFullscreen);
+
+        // Attach event listeners for KPI cards
+        document.querySelectorAll('.kpi-stat-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const filter = card.getAttribute('data-filter') || 'ALL';
+                filterMarkers(filter, card);
+            });
+        });
+
+        // Attach event listeners for Quick Focus list items using unique _id
+        document.querySelectorAll('.mini-case-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const uniqueId = item.getAttribute('data-id') || item.getAttribute('data-case-id');
+                const stateName = item.getAttribute('data-state');
+                focusOnCase(uniqueId, stateName);
+            });
+        });
+
+        // Responsive map size handling
+        document.addEventListener('fullscreenchange', () => {
+            setTimeout(() => {
+                if (map) map.invalidateSize();
+            }, 200);
+        });
+
+        window.addEventListener('resize', () => {
+            if (map) map.invalidateSize();
+        });
+
+        setTimeout(() => {
+            map.invalidateSize();
+            map.fitBounds(indiaBounds, { padding: [15, 15] });
+        }, 150);
+    });
+</script>

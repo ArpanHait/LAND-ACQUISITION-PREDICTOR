@@ -42,6 +42,7 @@ const item = (typeof caseItem !== 'undefined' && caseItem) ? caseItem : {
 };
 
 const riskLevel = item.risk_level || 'Medium';
+const riskClass = riskLevel.toLowerCase();
 const riskDist = item.risk_distribution || { low: 0, medium: 0, high: 0 };
 const factors = Array.isArray(item.top_risk_factors) ? item.top_risk_factors : [];
 const actions = Array.isArray(item.recommended_preventive_actions) ? item.recommended_preventive_actions : [];
@@ -58,193 +59,203 @@ const awardPercentStr = `${item.award_completed_percent || 0}%`;
 const possessionPercentStr = `${item.possession_completed_percent || 0}%`;
 %>
 
-<div class="container py-5">
+<div class="container-fluid py-3 px-3 px-lg-4" style="max-width: 1250px;">
 
     <% if (item.warning) { %>
-        <div class="alert alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #FDE68A;">
-            <i class="bi bi-exclamation-circle-fill me-2 text-warning"></i> <strong>Notice:</strong> <%= item.warning %>
+        <div class="alert alert-dismissible fade show rounded-3 mb-3 p-2.5 px-3" role="alert" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); color: #FDE68A; font-size: 0.82rem;">
+            <i class="bi bi-exclamation-circle-fill me-1.5 text-warning"></i> <strong>Notice:</strong> <%= item.warning %>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
         </div>
     <% } %>
 
-    <!-- Result Header Card -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-        <div class="p-4 p-md-5 text-white <%= riskLevel === 'High' ? 'bg-gradient-danger' : (riskLevel === 'Medium' ? 'bg-gradient-warning text-dark' : 'bg-gradient-success') %>">
-            <div class="row align-items-center">
+    <!-- Result Header Card (Dark with Soft Risk Accent) -->
+    <div class="card border-0 rounded-3 overflow-hidden mb-3 show-header-card risk-<%= riskClass %>">
+        <div class="p-3 p-md-4 text-white show-header-banner risk-<%= riskClass %>">
+            <div class="row align-items-center gy-2">
                 <div class="col-md-8">
-                    <span class="badge px-3 py-2 rounded-pill fw-bold mb-2" style="background: #181818; color: #E2E8F0; border: 1px solid rgba(255,255,255,0.12);">
-                        <i class="bi bi-folder2 me-1"></i> Case ID: <%= item.case_id || 'N/A' %>
-                    </span>
-                    <h2 class="fw-extrabold mb-1 text-white"><%= item.project_name || 'Land Acquisition Project' %></h2>
-                    <p class="mb-0" style="color: #E2E8F0; opacity: 0.9;">
-                        <i class="bi bi-geo-alt me-1"></i> <%= item.state || 'N/A' %> (<%= item.district_type || 'N/A' %>) • Sector: <%= item.project_type || 'N/A' %> • Land: <%= item.land_area_acres || 0 %> Acres (<%= item.land_area_hectares || 0 %> Ha)
+                    <div class="d-flex align-items-center gap-1.5 mb-1.5">
+                        <span class="badge px-2 py-0.5 rounded-pill fw-bold" style="background: #121212; color: #38BDF8; border: 1px solid rgba(255,255,255,0.08); font-family: monospace; font-size: 0.72rem;">
+                            <i class="bi bi-folder2 me-1"></i> <%= item.case_id || 'N/A' %>
+                        </span>
+                        <span class="badge px-2 py-0.5 rounded-pill fw-bold risk-badge-pill risk-<%= riskClass %>" style="font-size: 0.7rem;">
+                            <%= riskLevel.toUpperCase() %> RISK
+                        </span>
+                    </div>
+                    <h4 class="fw-bold mb-1 text-white"><%= item.project_name || 'Land Acquisition Project' %></h4>
+                    <p class="mb-0 text-muted small" style="font-size: 0.8rem;">
+                        <i class="bi bi-geo-alt me-1 text-teal"></i> <%= item.state || 'N/A' %> (<%= item.district_type || 'N/A' %>) • Sector: <%= item.project_type || 'N/A' %> • Land: <%= item.land_area_acres || 0 %> Acres (<%= item.land_area_hectares || 0 %> Ha)
                     </p>
                 </div>
-                <div class="col-md-4 text-md-end mt-4 mt-md-0">
-                    <div class="d-inline-block p-3 p-md-4 rounded-4 text-center" style="background: #181818; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);">
-                        <span class="small text-uppercase fw-bold d-block" style="color: #94A3B8;">Assigned Risk Tier</span>
-                        <h2 class="fw-extrabold mb-0 <%= riskLevel === 'High' ? 'text-danger' : (riskLevel === 'Medium' ? 'text-warning' : 'text-success') %>">
+                <div class="col-md-4 text-md-end">
+                    <div class="d-inline-block p-2 px-3 rounded-3 text-center" style="background: #141414; border: 1px solid rgba(255, 255, 255, 0.08);">
+                        <span class="text-muted small text-uppercase fw-semibold d-block" style="font-size: 0.68rem; letter-spacing: 0.03em;">Assigned Risk Tier</span>
+                        <h4 class="fw-bold mb-0 text-risk-<%= riskClass %>">
                             <%= riskLevel %> Risk
-                        </h2>
+                        </h4>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="p-4 border-top" style="background: #1E1E1E; border-color: rgba(255, 255, 255, 0.08) !important;">
-            <div class="row g-4 align-items-center">
+        <div class="p-3 border-top" style="background: #181818; border-color: rgba(255, 255, 255, 0.08) !important;">
+            <div class="row g-3 align-items-center">
                 <div class="col-md-4 text-center border-end" style="border-color: rgba(255, 255, 255, 0.08) !important;">
-                    <span class="small fw-semibold text-uppercase" style="color: #94A3B8;">Delay Probability</span>
-                    <h1 class="fw-extrabold mb-1 <%= riskLevel === 'High' ? 'text-danger' : (riskLevel === 'Medium' ? 'text-warning' : 'text-success') %>">
+                    <span class="small fw-semibold text-uppercase text-muted" style="font-size: 0.7rem; letter-spacing: 0.03em;">Delay Probability</span>
+                    <h2 class="fw-bold mb-1 text-risk-<%= riskClass %>">
                         <%= probPercent %>
-                    </h1>
-                    <div class="progress mt-2" style="height: 10px; background-color: #121212; border: 1px solid rgba(255,255,255,0.06); border-radius: 999px;">
+                    </h2>
+                    <div class="progress mt-1.5 mx-auto" style="height: 6px; max-width: 140px; background-color: #121212; border-radius: 999px;">
                         <div id="delayProgressBar"
-                             class="progress-bar <%= riskLevel === 'High' ? 'bg-danger' : (riskLevel === 'Medium' ? 'bg-warning' : 'bg-success') %>" 
+                             class="progress-bar progress-bar-risk-<%= riskClass %>" 
                              role="progressbar" 
                              aria-valuenow="<%= progressWidth %>" 
                              aria-valuemin="0" 
-                             aria-valuemax="100"
-                             data-width="<%= progressWidth %>"
-                             style="border-radius: 999px;">
+                             aria-valuemax="100" 
+                             data-width="<%= progressWidth %>">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 text-center border-end" style="border-color: rgba(255, 255, 255, 0.08) !important;">
-                    <span class="small fw-semibold text-uppercase" style="color: #94A3B8;">Probability Breakdown</span>
-                    <div class="d-flex justify-content-center gap-3 mt-2">
+                    <span class="small fw-semibold text-uppercase text-muted" style="font-size: 0.7rem; letter-spacing: 0.03em;">Probability Breakdown</span>
+                    <div class="d-flex justify-content-center gap-3 mt-1.5">
                         <div>
-                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.25);">Low</span>
-                            <div class="fw-bold text-white mt-1"><%= lowDistPercent %></div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.25); font-size: 0.68rem;">Low</span>
+                            <div class="fw-bold text-white mt-0.5" style="font-size: 0.82rem;"><%= lowDistPercent %></div>
                         </div>
                         <div>
-                            <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.25);">Medium</span>
-                            <div class="fw-bold text-white mt-1"><%= medDistPercent %></div>
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.12); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.25); font-size: 0.68rem;">Medium</span>
+                            <div class="fw-bold text-white mt-0.5" style="font-size: 0.82rem;"><%= medDistPercent %></div>
                         </div>
                         <div>
-                            <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.25);">High</span>
-                            <div class="fw-bold text-white mt-1"><%= highDistPercent %></div>
+                            <span class="badge" style="background: rgba(239, 68, 68, 0.12); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.25); font-size: 0.68rem;">High</span>
+                            <div class="fw-bold text-white mt-0.5" style="font-size: 0.82rem;"><%= highDistPercent %></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
-                    <span class="small fw-semibold text-uppercase" style="color: #94A3B8;">Inference Latency</span>
+                    <span class="small fw-semibold text-uppercase text-muted" style="font-size: 0.7rem; letter-spacing: 0.03em;">Inference Latency</span>
                     <h4 class="fw-bold mb-1 text-white"><%= item.processing_time_ms || 0 %> ms</h4>
-                    <span class="badge px-3 py-1.5" style="background: #121212; color: #CBD5E1; border: 1px solid rgba(255, 255, 255, 0.1);">Sub-second Realtime</span>
+                    <span class="badge px-2.5 py-1" style="background: #121212; color: #CBD5E1; border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.7rem;">Sub-second Realtime</span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Details and Action Columns -->
-    <div class="row g-4">
+    <div class="row g-3">
         
         <!-- Left: Bottleneck Drivers & Mitigations -->
         <div class="col-lg-7">
             <!-- Top Risk Factors -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-                <h5 class="fw-bold text-white mb-3"><i class="bi bi-exclamation-octagon-fill text-danger me-2"></i> Identified Critical Bottlenecks</h5>
+            <div class="card border-0 rounded-3 p-3 mb-3" style="background: #1E1E1E;">
+                <h6 class="fw-bold text-white mb-2.5" style="font-size: 0.88rem;">
+                    <i class="bi bi-exclamation-octagon-fill me-1.5" style="color: #F87171;"></i> Identified Critical Bottlenecks
+                </h6>
                 <% if (factors.length > 0) { %>
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-1.5">
                         <% factors.forEach(function(factor) { %>
-                            <div class="d-flex align-items-center p-3 rounded-3" style="background: #181818; border: 1px solid rgba(255, 255, 255, 0.06);">
-                                <i class="bi bi-x-circle-fill text-danger me-2 fs-5"></i>
+                            <div class="d-flex align-items-center p-2 px-2.5 rounded-2" style="background: #141414; border: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.82rem;">
+                                <i class="bi bi-x-circle-fill me-2 fs-6" style="color: #F87171;"></i>
                                 <span class="fw-semibold text-white"><%= factor %></span>
                             </div>
                         <% }); %>
                     </div>
                 <% } else { %>
-                    <p class="text-muted mb-0">No severe bottleneck triggers identified.</p>
+                    <p class="text-muted small mb-0">No severe bottleneck triggers identified.</p>
                 <% } %>
             </div>
 
             <!-- SHAP Explainability Chart -->
             <% if (shapData.length > 0) { %>
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-                <h5 class="fw-bold text-white mb-1">
-                    <i class="bi bi-diagram-3-fill text-primary me-2"></i> AI Explainability (SHAP)
-                </h5>
-                <p class="small mb-3" style="color: #94A3B8;">How much each feature contributes to the predicted delay probability — as learned by the XGBoost model.</p>
-                <div style="height: 260px;">
+            <div class="card border-0 rounded-3 p-3 mb-3" style="background: #1E1E1E;">
+                <h6 class="fw-bold text-white mb-1" style="font-size: 0.88rem;">
+                    <i class="bi bi-diagram-3-fill text-teal me-1.5"></i> AI Explainability (SHAP)
+                </h6>
+                <p class="small mb-2 text-muted" style="font-size: 0.74rem;">How each feature contributes to the predicted delay probability.</p>
+                <div style="height: 200px; position: relative;">
                     <canvas id="shapChart"></canvas>
                 </div>
-                <div class="d-flex gap-3 mt-2 small" style="color: #CBD5E1;">
-                    <span><span style="display:inline-block;width:12px;height:12px;background:#dc3545;border-radius:2px;margin-right:4px;"></span>Increases delay risk</span>
-                    <span><span style="display:inline-block;width:12px;height:12px;background:#198754;border-radius:2px;margin-right:4px;"></span>Reduces delay risk</span>
+                <div class="d-flex gap-3 mt-2" style="color: #94A3B8; font-size: 0.72rem;">
+                    <span><span style="display:inline-block;width:10px;height:10px;background:#EF4444;border-radius:2px;margin-right:4px;"></span>Increases delay risk</span>
+                    <span><span style="display:inline-block;width:10px;height:10px;background:#10B981;border-radius:2px;margin-right:4px;"></span>Reduces delay risk</span>
                 </div>
             </div>
             <% } %>
 
             <!-- Recommended Preventive Actions -->
-            <div class="card border-0 shadow-sm rounded-4 p-4" style="border-left: 4px solid #06B6D4 !important;">
-                <h5 class="fw-bold text-white mb-3"><i class="bi bi-clipboard-check-fill me-2" style="color: #06B6D4;"></i> Recommended Officer Preventive Actions</h5>
+            <div class="card border-0 rounded-3 p-3" style="background: #1E1E1E; border-left: 3px solid #06B6D4 !important;">
+                <h6 class="fw-bold text-white mb-2.5" style="font-size: 0.88rem;">
+                    <i class="bi bi-clipboard-check-fill me-1.5 text-teal"></i> Recommended Officer Preventive Actions
+                </h6>
                 <% if (actions.length > 0) { %>
-                    <div class="d-flex flex-column gap-3">
+                    <div class="d-flex flex-column gap-2">
                         <% actions.forEach(function(action, idx) { %>
-                            <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background: #181818; border: 1px solid rgba(255, 255, 255, 0.06);">
-                                <span class="badge rounded-circle px-2 py-1" style="background: #06B6D4; color: #0F172A; font-weight: bold;"><%= idx + 1 %></span>
+                            <div class="d-flex align-items-start gap-2.5 p-2 px-2.5 rounded-2" style="background: #141414; border: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.82rem;">
+                                <span class="badge rounded-circle px-2 py-0.5" style="background: rgba(6, 182, 212, 0.18); color: #22D3EE; border: 1px solid rgba(6, 182, 212, 0.35); font-weight: bold; font-size: 0.7rem;"><%= idx + 1 %></span>
                                 <span style="color: #E2E8F0;"><%= action %></span>
                             </div>
                         <% }); %>
                     </div>
                 <% } else { %>
-                    <p class="text-muted mb-0">Standard milestone tracking recommended.</p>
+                    <p class="text-muted small mb-0">Standard milestone tracking recommended.</p>
                 <% } %>
             </div>
         </div>
 
         <!-- Right: Case Parameter Snapshot -->
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm rounded-4 p-4">
-                <h5 class="fw-bold text-white mb-3"><i class="bi bi-info-circle-fill text-primary me-2"></i> Case Profile Summary</h5>
-                <table class="table table-sm table-borderless mb-0">
+            <div class="card border-0 rounded-3 p-3" style="background: #1E1E1E;">
+                <h6 class="fw-bold text-white mb-2.5" style="font-size: 0.88rem;">
+                    <i class="bi bi-info-circle-fill text-teal me-1.5"></i> Case Profile Summary
+                </h6>
+                <table class="table table-sm table-borderless mb-0" style="font-size: 0.82rem;">
                     <tbody>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Landowners Affected</td>
-                            <td class="fw-bold text-end py-2 text-white"><%= item.affected_owner_count || 0 %> Owners</td>
+                            <td class="py-1.5 text-muted">Landowners Affected</td>
+                            <td class="fw-bold text-end py-1.5 text-white"><%= item.affected_owner_count || 0 %> Owners</td>
                         </tr>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Compensation Amount</td>
-                            <td class="fw-bold text-end py-2 text-white">₹ <%= item.compensation_estimate_inr_lakh || 0 %> Lakhs</td>
+                            <td class="py-1.5 text-muted">Compensation Amount</td>
+                            <td class="fw-bold text-end py-1.5 text-white">₹ <%= item.compensation_estimate_inr_lakh || 0 %> Lakhs</td>
                         </tr>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Funding In Escrow</td>
-                            <td class="fw-bold text-end py-2">
-                                <span class="badge <%= item.compensation_funding_available ? 'bg-success' : 'bg-danger' %>">
+                            <td class="py-1.5 text-muted">Funding In Escrow</td>
+                            <td class="fw-bold text-end py-1.5">
+                                <span class="badge <%= item.compensation_funding_available ? 'escrow-badge-available' : 'escrow-badge-pending' %>">
                                     <%= item.compensation_funding_available ? 'Available' : 'Pending' %>
                                 </span>
                             </td>
                         </tr>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Multi-Village Jurisdiction</td>
-                            <td class="fw-bold text-end py-2 text-white"><%= item.is_multi_village ? 'Yes' : 'No' %></td>
+                            <td class="py-1.5 text-muted">Multi-Village Jurisdiction</td>
+                            <td class="fw-bold text-end py-1.5 text-white"><%= item.is_multi_village ? 'Yes' : 'No' %></td>
                         </tr>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Current Notification</td>
-                            <td class="fw-bold text-end py-2 text-white"><%= item.notification_stage || 'N/A' %></td>
+                            <td class="py-1.5 text-muted">Current Notification</td>
+                            <td class="fw-bold text-end py-1.5 text-white"><%= item.notification_stage || 'N/A' %></td>
                         </tr>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Days Elapsed</td>
-                            <td class="fw-bold text-end py-2 text-white"><%= item.days_since_case_opened || 0 %> Days</td>
+                            <td class="py-1.5 text-muted">Days Elapsed</td>
+                            <td class="fw-bold text-end py-1.5 text-white"><%= item.days_since_case_opened || 0 %> Days</td>
                         </tr>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
-                            <td class="py-2" style="color: #94A3B8;">Award Declared</td>
-                            <td class="fw-bold text-end py-2 text-white"><%= awardPercentStr %></td>
+                            <td class="py-1.5 text-muted">Award Declared</td>
+                            <td class="fw-bold text-end py-1.5 text-white"><%= awardPercentStr %></td>
                         </tr>
                         <tr>
-                            <td class="py-2" style="color: #94A3B8;">Physical Possession</td>
-                            <td class="fw-bold text-end py-2 text-white"><%= possessionPercentStr %></td>
+                            <td class="py-1.5 text-muted">Physical Possession</td>
+                            <td class="fw-bold text-end py-1.5 text-white"><%= possessionPercentStr %></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Bottom Navigation -->
-            <div class="d-flex gap-3 mt-4">
-                <a href="/predict" class="btn btn-primary-pill flex-grow-1 py-2.5 fw-bold d-flex align-items-center justify-content-center gap-2">
+            <div class="d-flex gap-2 mt-3">
+                <a href="/predict" class="btn btn-teal flex-grow-1 py-1.5 fw-semibold d-flex align-items-center justify-content-center gap-1.5" style="font-size: 0.82rem; border-radius: 8px;">
                     <i class="bi bi-plus-circle me-1"></i> New Assessment
                 </a>
-                <a href="/history" class="btn flex-grow-1 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2" style="background: #242424; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.15); border-radius: 9999px;">
+                <a href="/history" class="btn flex-grow-1 py-1.5 fw-semibold d-flex align-items-center justify-content-center gap-1.5" style="background: #1E1E1E; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; font-size: 0.82rem;">
                     <i class="bi bi-card-list me-1"></i> View All History
                 </a>
             </div>
@@ -275,15 +286,15 @@ const possessionPercentStr = `${item.possession_completed_percent || 0}%`;
 
     const labels  = shap.map(s => s.feature);
     const values  = shap.map(s => s.shap_value);
-    const colors  = shap.map(s => s.shap_value > 0 ? '#dc3545' : '#198754');
-    const borders = shap.map(s => s.shap_value > 0 ? '#b02a37' : '#146c43');
+    const colors  = shap.map(s => s.shap_value > 0 ? '#EF4444' : '#10B981');
+    const borders = shap.map(s => s.shap_value > 0 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(16, 185, 129, 0.8)');
 
     new Chart(canvas, {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
-                label: 'SHAP Value (contribution to delay probability)',
+                label: 'SHAP Value',
                 data: values,
                 backgroundColor: colors,
                 borderColor: borders,
@@ -308,15 +319,16 @@ const possessionPercentStr = `${item.possession_completed_percent || 0}%`;
             },
             scales: {
                 x: {
-                    grid: { color: 'rgba(255,255,255,0.08)' },
+                    grid: { color: 'rgba(255,255,255,0.06)' },
                     ticks: { 
                         color: '#94A3B8',
+                        font: { size: 10 },
                         callback: v => (v > 0 ? '+' : '') + (v * 100).toFixed(1) + '%' 
                     }
                 },
                 y: { 
                     grid: { display: false },
-                    ticks: { color: '#CBD5E1' }
+                    ticks: { color: '#CBD5E1', font: { size: 10.5 } }
                 }
             }
         }

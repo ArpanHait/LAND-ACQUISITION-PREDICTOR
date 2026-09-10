@@ -1,195 +1,600 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
 
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <div>
-                    <h2 class="fw-bold text-navy mb-1"><i class="bi bi-file-earmark-plus text-teal me-2"></i> Land Acquisition Risk Assessment</h2>
-                    <p class="text-muted mb-0">Fill in project parameters to compute delay risk probability and generate mitigation strategies.</p>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h2 class="fw-bold text-navy mb-1"><i class="bi bi-file-earmark-plus text-teal me-2"></i> Land
+                            Acquisition Risk Assessment</h2>
+                        <p class="text-muted mb-0">Fill in project parameters to compute delay risk probability and
+                            generate mitigation strategies.</p>
+                    </div>
+                    <a href="/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back to
+                        Home</a>
                 </div>
-                <a href="/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
+
+                <form action="/predict" method="POST" class="card shadow-sm border-0 rounded-4 p-4 p-md-5">
+
+                    <!-- Section 1: Project Details -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy pb-2 border-bottom"><i
+                                class="bi bi-building me-2 text-primary"></i> 1. Project Identification</h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Case ID / Notification Ref *</label>
+                                <input type="text" name="case_id" class="form-control"
+                                    placeholder="e.g. LA-2026-RW-0042"
+                                    value="LA-2026-RW-<%= Math.floor(1000 + Math.random() * 9000) %>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Project Name *</label>
+                                <input type="text" name="project_name" class="form-control"
+                                    placeholder="e.g. Eastern Dedicated Freight Corridor"
+                                    value="Eastern Dedicated Freight Corridor" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold d-flex align-items-center justify-content-between">
+                                    <span>State / Union Territory *</span>
+                                    <span class="badge bg-dark text-secondary border border-secondary fw-normal"
+                                        style="font-size:0.65rem;">36 States &amp; UTs</span>
+                                </label>
+
+                                <div class="searchable-select-wrapper position-relative" id="stateSelectWrapper">
+                                    <!-- Hidden actual form value that gets submitted (No default state) -->
+                                    <input type="hidden" name="state" id="selectedStateInput" value="" required>
+
+                                    <!-- Searchable Trigger Input matching standard dark theme form controls -->
+                                    <div class="state-input-box position-relative">
+                                        <input type="text" id="stateSearchInput" class="form-control state-custom-input"
+                                            placeholder="Select or search State / UT..." value="" autocomplete="off"
+                                            required>
+                                        <i class="bi bi-chevron-down state-dropdown-arrow" id="stateDropdownToggle"></i>
+                                    </div>
+
+                                    <!-- Dropdown Menu List - 100% Dark Themed -->
+                                    <div class="searchable-dropdown-menu shadow-lg" id="stateDropdownList"
+                                        style="display: none;">
+                                        <div
+                                            class="searchable-menu-header d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-search me-1"></i> Instant Search</span>
+                                            <span id="stateMatchCount"
+                                                class="badge bg-dark text-secondary border border-secondary">36 States
+                                                &amp; UTs</span>
+                                        </div>
+
+                                        <div class="state-options-scroll" style="max-height: 250px; overflow-y: auto;">
+                                            <!-- States Header -->
+                                            <div class="state-category-header" data-category="states">STATES (28)</div>
+                                            <div class="state-option-item" data-value="Andhra Pradesh">Andhra Pradesh
+                                            </div>
+                                            <div class="state-option-item" data-value="Arunachal Pradesh">Arunachal
+                                                Pradesh</div>
+                                            <div class="state-option-item" data-value="Assam">Assam</div>
+                                            <div class="state-option-item" data-value="Bihar">Bihar</div>
+                                            <div class="state-option-item" data-value="Chhattisgarh">Chhattisgarh</div>
+                                            <div class="state-option-item" data-value="Goa">Goa</div>
+                                            <div class="state-option-item" data-value="Gujarat">Gujarat</div>
+                                            <div class="state-option-item" data-value="Haryana">Haryana</div>
+                                            <div class="state-option-item" data-value="Himachal Pradesh">Himachal
+                                                Pradesh</div>
+                                            <div class="state-option-item" data-value="Jharkhand">Jharkhand</div>
+                                            <div class="state-option-item" data-value="Karnataka">Karnataka</div>
+                                            <div class="state-option-item" data-value="Kerala">Kerala</div>
+                                            <div class="state-option-item" data-value="Madhya Pradesh">Madhya Pradesh
+                                            </div>
+                                            <div class="state-option-item" data-value="Maharashtra">Maharashtra</div>
+                                            <div class="state-option-item" data-value="Manipur">Manipur</div>
+                                            <div class="state-option-item" data-value="Meghalaya">Meghalaya</div>
+                                            <div class="state-option-item" data-value="Mizoram">Mizoram</div>
+                                            <div class="state-option-item" data-value="Nagaland">Nagaland</div>
+                                            <div class="state-option-item" data-value="Odisha">Odisha</div>
+                                            <div class="state-option-item" data-value="Punjab">Punjab</div>
+                                            <div class="state-option-item" data-value="Rajasthan">Rajasthan</div>
+                                            <div class="state-option-item" data-value="Sikkim">Sikkim</div>
+                                            <div class="state-option-item" data-value="Tamil Nadu">Tamil Nadu</div>
+                                            <div class="state-option-item" data-value="Telangana">Telangana</div>
+                                            <div class="state-option-item" data-value="Tripura">Tripura</div>
+                                            <div class="state-option-item" data-value="Uttar Pradesh">Uttar Pradesh
+                                            </div>
+                                            <div class="state-option-item" data-value="Uttarakhand">Uttarakhand</div>
+                                            <div class="state-option-item" data-value="West Bengal">West Bengal</div>
+
+                                            <!-- UTs Header -->
+                                            <div class="state-category-header" data-category="uts">UNION TERRITORIES (8)
+                                            </div>
+                                            <div class="state-option-item" data-value="Andaman and Nicobar Islands">
+                                                Andaman and Nicobar Islands</div>
+                                            <div class="state-option-item" data-value="Chandigarh">Chandigarh</div>
+                                            <div class="state-option-item"
+                                                data-value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar
+                                                Haveli and Daman and Diu</div>
+                                            <div class="state-option-item" data-value="Delhi">Delhi (NCT)</div>
+                                            <div class="state-option-item" data-value="Jammu and Kashmir">Jammu and
+                                                Kashmir</div>
+                                            <div class="state-option-item" data-value="Ladakh">Ladakh</div>
+                                            <div class="state-option-item" data-value="Lakshadweep">Lakshadweep</div>
+                                            <div class="state-option-item" data-value="Puducherry">Puducherry</div>
+                                        </div>
+
+                                        <div id="noStateFound" class="p-3 text-center text-secondary"
+                                            style="display: none; font-size: 0.82rem;">
+                                            <i class="bi bi-exclamation-circle me-1 text-warning"></i> No matching State
+                                            or UT found
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">District Type *</label>
+                                <select name="district_type" class="form-select" required>
+                                    <option value="Rural" selected>Rural</option>
+                                    <option value="Semi-urban">Semi-urban</option>
+                                    <option value="Urban">Urban</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Project Sector *</label>
+                                <select name="project_type" class="form-select" required>
+                                    <option value="Railway" selected>Railway</option>
+                                    <option value="National Highway">National Highway</option>
+                                    <option value="State Highway">State Highway</option>
+                                    <option value="Urban Infrastructure">Urban Infrastructure</option>
+                                    <option value="Industrial Corridor">Industrial Corridor</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Land & Spatial Attributes -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy pb-2 border-bottom"><i class="bi bi-geo-alt me-2 text-success"></i>
+                            2. Land & Ownership Parameters</h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Land Area (Acres)</label>
+                                <input type="number" step="0.01" name="land_area_acres" id="areaAcres"
+                                    class="form-control" placeholder="e.g. 8.2" value="8.2">
+                                <div class="form-text">As per field revenue survey</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Land Area (Hectares)</label>
+                                <input type="number" step="0.01" name="land_area_hectares" id="areaHectares"
+                                    class="form-control" placeholder="e.g. 3.32" value="3.32">
+                                <div class="form-text">Auto-synced ($1\text{ ac} \approx 0.40\text{ ha}$)</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Land Category *</label>
+                                <select name="land_type" class="form-select" required>
+                                    <option value="Agricultural" selected>Agricultural</option>
+                                    <option value="Residential">Residential</option>
+                                    <option value="Commercial">Commercial</option>
+                                    <option value="Forest">Forest / Wetland</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Affected Landowners Count *</label>
+                                <input type="number" name="affected_owner_count" class="form-control" value="12" min="1"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Notification Stage *</label>
+                                <select name="notification_stage" class="form-select" required>
+                                    <option value="Pre-notification">Pre-notification (Initial Survey)</option>
+                                    <option value="3A issued" selected>Section 3A / 4(1) Issued (Intention to Acquire)
+                                    </option>
+                                    <option value="3D issued">Section 3D / 6 Declaration (Acquisition Finalized)
+                                    </option>
+                                    <option value="3G award">Section 3G / 11 Award Declared (Compensation Fixed)
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Multi-Village Jurisdiction?</label>
+                                <select name="is_multi_village" class="form-select">
+                                    <option value="1" selected>Yes (Spans multiple revenue villages)</option>
+                                    <option value="0">No (Single village parcel)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Legal & Dispute Risk Factors -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy pb-2 border-bottom"><i
+                                class="bi bi-exclamation-triangle me-2 text-danger"></i> 3. Legal, Dispute & Objection
+                            Factors</h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Ownership Title Dispute?</label>
+                                <select name="has_title_dispute" class="form-select">
+                                    <option value="1" selected>Yes (Conflicting title claims)</option>
+                                    <option value="0">No (Clear title registry)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Court Litigation Pending?</label>
+                                <select name="has_court_case" class="form-select">
+                                    <option value="1" selected>Yes (Stay order / High Court writ)</option>
+                                    <option value="0">No (No active court cases)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Public Objections Filed?</label>
+                                <select name="has_objection" class="form-select">
+                                    <option value="1" selected>Yes (Section 3C / 15 objections)</option>
+                                    <option value="0">No (Nil objections)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Compensation & Financials -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy pb-2 border-bottom"><i
+                                class="bi bi-cash-stack me-2 text-success"></i> 4. Financial & Compensation Status</h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Compensation Estimate (INR Lakhs) *</label>
+                                <input type="number" step="0.1" name="compensation_estimate_inr_lakh"
+                                    class="form-control" value="350.0" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Compensation Funding Available in Escrow?</label>
+                                <select name="compensation_funding_available" class="form-select">
+                                    <option value="0" selected>Pending (Budget / Treasury deposit awaited)</option>
+                                    <option value="1">Available (Full escrow deposit confirmed)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Current Milestone Progress -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy pb-2 border-bottom"><i
+                                class="bi bi-bar-chart-steps me-2 text-info"></i> 5. Statutory Milestone Progress (%)
+                        </h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Days Elapsed Since Notification *</label>
+                                <input type="number" name="days_since_case_opened" class="form-control" value="240"
+                                    min="0" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Land Notified (% Area) *</label>
+                                <input type="number" step="0.1" name="land_notified_percent" class="form-control"
+                                    value="60.0" min="0" max="100" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Award Declared (% Area) *</label>
+                                <input type="number" step="0.1" name="award_completed_percent" class="form-control"
+                                    value="30.0" min="0" max="100" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Compensation Disbursed (% Amount) *</label>
+                                <input type="number" step="0.1" name="compensation_disbursed_percent"
+                                    class="form-control" value="15.0" min="0" max="100" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Physical Possession (% Land) *</label>
+                                <input type="number" step="0.1" name="possession_completed_percent" class="form-control"
+                                    value="0.0" min="0" max="100" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="text-center pt-3 border-top">
+                        <button type="submit" class="btn btn-teal btn-lg px-5 py-3 fw-bold rounded-pill shadow">
+                            <i class="bi bi-lightning-charge-fill me-2"></i> Compute Delay Risk & Actions
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
-
-            <form action="/predict" method="POST" class="card shadow-sm border-0 rounded-4 p-4 p-md-5">
-                
-                <!-- Section 1: Project Details -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-navy pb-2 border-bottom"><i class="bi bi-building me-2 text-primary"></i> 1. Project Identification</h5>
-                    <div class="row g-3 mt-1">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Case ID / Notification Ref *</label>
-                            <input type="text" name="case_id" class="form-control" placeholder="e.g. LA-2026-RW-0042" value="LA-2026-RW-0042" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Project Name *</label>
-                            <input type="text" name="project_name" class="form-control" placeholder="e.g. Eastern Dedicated Freight Corridor" value="Eastern Dedicated Freight Corridor" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">State *</label>
-                            <select name="state" class="form-select" required>
-                                <option value="Uttar Pradesh" selected>Uttar Pradesh</option>
-                                <option value="Punjab">Punjab</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Rajasthan">Rajasthan</option>
-                                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                <option value="West Bengal">West Bengal</option>
-                                <option value="Chhattisgarh">Chhattisgarh</option>
-                                <option value="Odisha">Odisha</option>
-                                <option value="Haryana">Haryana</option>
-                                <option value="Karnataka">Karnataka</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">District Type *</label>
-                            <select name="district_type" class="form-select" required>
-                                <option value="Rural" selected>Rural</option>
-                                <option value="Semi-urban">Semi-urban</option>
-                                <option value="Urban">Urban</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Project Sector *</label>
-                            <select name="project_type" class="form-select" required>
-                                <option value="Railway" selected>Railway</option>
-                                <option value="National Highway">National Highway</option>
-                                <option value="State Highway">State Highway</option>
-                                <option value="Urban Infrastructure">Urban Infrastructure</option>
-                                <option value="Industrial Corridor">Industrial Corridor</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 2: Land & Spatial Attributes -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-navy pb-2 border-bottom"><i class="bi bi-geo-alt me-2 text-success"></i> 2. Land & Ownership Parameters</h5>
-                    <div class="row g-3 mt-1">
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Land Area (Acres)</label>
-                            <input type="number" step="0.01" name="land_area_acres" id="areaAcres" class="form-control" placeholder="e.g. 8.2" value="8.2">
-                            <div class="form-text">As per field revenue survey</div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Land Area (Hectares)</label>
-                            <input type="number" step="0.01" name="land_area_hectares" id="areaHectares" class="form-control" placeholder="e.g. 3.32" value="3.32">
-                            <div class="form-text">Auto-synced ($1\text{ ac} \approx 0.40\text{ ha}$)</div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Land Category *</label>
-                            <select name="land_type" class="form-select" required>
-                                <option value="Agricultural" selected>Agricultural</option>
-                                <option value="Residential">Residential</option>
-                                <option value="Commercial">Commercial</option>
-                                <option value="Forest">Forest / Wetland</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Affected Landowners Count *</label>
-                            <input type="number" name="affected_owner_count" class="form-control" value="12" min="1" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Notification Stage *</label>
-                            <select name="notification_stage" class="form-select" required>
-                                <option value="Pre-notification">Pre-notification (Initial Survey)</option>
-                                <option value="3A issued" selected>Section 3A / 4(1) Issued (Intention to Acquire)</option>
-                                <option value="3D issued">Section 3D / 6 Declaration (Acquisition Finalized)</option>
-                                <option value="3G award">Section 3G / 11 Award Declared (Compensation Fixed)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Multi-Village Jurisdiction?</label>
-                            <select name="is_multi_village" class="form-select">
-                                <option value="1" selected>Yes (Spans multiple revenue villages)</option>
-                                <option value="0">No (Single village parcel)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 3: Legal & Dispute Risk Factors -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-navy pb-2 border-bottom"><i class="bi bi-exclamation-triangle me-2 text-danger"></i> 3. Legal, Dispute & Objection Factors</h5>
-                    <div class="row g-3 mt-1">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Ownership Title Dispute?</label>
-                            <select name="has_title_dispute" class="form-select">
-                                <option value="1" selected>Yes (Conflicting title claims)</option>
-                                <option value="0">No (Clear title registry)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Court Litigation Pending?</label>
-                            <select name="has_court_case" class="form-select">
-                                <option value="1" selected>Yes (Stay order / High Court writ)</option>
-                                <option value="0">No (No active court cases)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Public Objections Filed?</label>
-                            <select name="has_objection" class="form-select">
-                                <option value="1" selected>Yes (Section 3C / 15 objections)</option>
-                                <option value="0">No (Nil objections)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 4: Compensation & Financials -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-navy pb-2 border-bottom"><i class="bi bi-cash-stack me-2 text-success"></i> 4. Financial & Compensation Status</h5>
-                    <div class="row g-3 mt-1">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Compensation Estimate (INR Lakhs) *</label>
-                            <input type="number" step="0.1" name="compensation_estimate_inr_lakh" class="form-control" value="350.0" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Compensation Funding Available in Escrow?</label>
-                            <select name="compensation_funding_available" class="form-select">
-                                <option value="0" selected>Pending (Budget / Treasury deposit awaited)</option>
-                                <option value="1">Available (Full escrow deposit confirmed)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 5: Current Milestone Progress -->
-                <div class="mb-4">
-                    <h5 class="fw-bold text-navy pb-2 border-bottom"><i class="bi bi-bar-chart-steps me-2 text-info"></i> 5. Statutory Milestone Progress (%)</h5>
-                    <div class="row g-3 mt-1">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Days Elapsed Since Notification *</label>
-                            <input type="number" name="days_since_case_opened" class="form-control" value="240" min="0" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Land Notified (% Area) *</label>
-                            <input type="number" step="0.1" name="land_notified_percent" class="form-control" value="60.0" min="0" max="100" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Award Declared (% Area) *</label>
-                            <input type="number" step="0.1" name="award_completed_percent" class="form-control" value="30.0" min="0" max="100" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Compensation Disbursed (% Amount) *</label>
-                            <input type="number" step="0.1" name="compensation_disbursed_percent" class="form-control" value="15.0" min="0" max="100" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Physical Possession (% Land) *</label>
-                            <input type="number" step="0.1" name="possession_completed_percent" class="form-control" value="0.0" min="0" max="100" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Button -->
-                <div class="text-center pt-3 border-top">
-                    <button type="submit" class="btn btn-teal btn-lg px-5 py-3 fw-bold rounded-pill shadow">
-                        <i class="bi bi-lightning-charge-fill me-2"></i> Compute Delay Risk & Actions
-                    </button>
-                </div>
-
-            </form>
-
         </div>
     </div>
-</div>
+
+    <style>
+        /* Searchable State Dropdown Styles - 100% Dark Mode Matching BhoomiAI */
+        .searchable-select-wrapper {
+            position: relative;
+        }
+
+        .state-input-box {
+            position: relative;
+        }
+
+        .state-custom-input {
+            background-color: #181818 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #FFFFFF !important;
+            border-radius: 12px !important;
+            padding: 0.7rem 2.2rem 0.7rem 1rem !important;
+            font-size: 0.925rem !important;
+            cursor: pointer;
+        }
+
+        .state-custom-input:focus {
+            background-color: #1f1f1f !important;
+            border-color: #1ED760 !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 0 0 3px rgba(30, 215, 96, 0.25) !important;
+        }
+
+        .state-custom-input::placeholder {
+            color: #6B7280 !important;
+        }
+
+        .state-dropdown-arrow {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+            font-size: 0.82rem;
+            pointer-events: none;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .searchable-select-wrapper.open .state-dropdown-arrow {
+            transform: translateY(-50%) rotate(180deg);
+            color: #1ED760;
+        }
+
+        .searchable-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            z-index: 1060;
+            background: #1E1E1E !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7) !important;
+            overflow: hidden;
+        }
+
+        .searchable-menu-header {
+            background: #181818;
+            padding: 0.5rem 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94A3B8;
+            font-size: 0.72rem;
+        }
+
+        .state-category-header {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #38BDF8;
+            background: #141414;
+            padding: 0.35rem 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        .state-option-item {
+            padding: 0.5rem 0.85rem;
+            font-size: 0.84rem;
+            color: #E2E8F0;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .state-option-item:hover,
+        .state-option-item.highlighted {
+            background: #282828 !important;
+            color: #1ED760 !important;
+            font-weight: 600;
+            padding-left: 1.05rem;
+        }
+
+        .state-option-item.active {
+            background: #0891B2 !important;
+            color: #FFFFFF !important;
+            font-weight: 600;
+        }
+
+        .state-option-item.active:hover {
+            background: #06B6D4 !important;
+            color: #FFFFFF !important;
+        }
+
+        .state-options-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .state-options-scroll::-webkit-scrollbar-track {
+            background: #181818;
+        }
+
+        .state-options-scroll::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('stateSelectWrapper');
+            const searchInput = document.getElementById('stateSearchInput');
+            const hiddenInput = document.getElementById('selectedStateInput');
+            const dropdownList = document.getElementById('stateDropdownList');
+            const matchCountBadge = document.getElementById('stateMatchCount');
+            const noStateFound = document.getElementById('noStateFound');
+            const optionItems = Array.from(document.querySelectorAll('.state-option-item'));
+            const categoryHeaders = Array.from(document.querySelectorAll('.state-category-header'));
+
+            let highlightedIndex = -1;
+
+            function openDropdown() {
+                dropdownList.style.display = 'block';
+                wrapper.classList.add('open');
+                filterStates(searchInput.value.trim());
+            }
+
+            function closeDropdown() {
+                dropdownList.style.display = 'none';
+                wrapper.classList.remove('open');
+                highlightedIndex = -1;
+                optionItems.forEach(el => el.classList.remove('highlighted'));
+
+                // If user typed something not matching or left it blank, sync with hiddenInput
+                if (hiddenInput.value) {
+                    searchInput.value = hiddenInput.value;
+                } else {
+                    searchInput.value = '';
+                }
+            }
+
+            function filterStates(query) {
+                const q = query.toLowerCase();
+                let visibleCount = 0;
+                let statesVisible = 0;
+                let utsVisible = 0;
+
+                optionItems.forEach(item => {
+                    const text = item.textContent.trim().toLowerCase();
+                    const matches = text.includes(q);
+                    if (matches) {
+                        item.style.display = 'flex';
+                        visibleCount++;
+                        const isUnderUT = item.getAttribute('data-value') === 'Delhi' ||
+                            item.getAttribute('data-value') === 'Chandigarh' ||
+                            item.getAttribute('data-value') === 'Ladakh' ||
+                            item.getAttribute('data-value') === 'Jammu and Kashmir' ||
+                            item.getAttribute('data-value') === 'Puducherry' ||
+                            item.getAttribute('data-value') === 'Lakshadweep' ||
+                            item.getAttribute('data-value') === 'Andaman and Nicobar Islands' ||
+                            item.getAttribute('data-value') === 'Dadra and Nagar Haveli and Daman and Diu';
+                        if (isUnderUT) utsVisible++;
+                        else statesVisible++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Toggle category headers visibility
+                categoryHeaders.forEach(header => {
+                    const cat = header.getAttribute('data-category');
+                    if (cat === 'states') {
+                        header.style.display = statesVisible > 0 ? 'block' : 'none';
+                    } else if (cat === 'uts') {
+                        header.style.display = utsVisible > 0 ? 'block' : 'none';
+                    }
+                });
+
+                matchCountBadge.textContent = `${visibleCount} found`;
+                noStateFound.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            function selectState(val, label) {
+                hiddenInput.value = val;
+                searchInput.value = label || val;
+                optionItems.forEach(item => {
+                    if (item.getAttribute('data-value') === val) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                closeDropdown();
+            }
+
+            // Event Listeners
+            searchInput.addEventListener('focus', () => {
+                openDropdown();
+                searchInput.select();
+            });
+
+            searchInput.addEventListener('click', () => {
+                openDropdown();
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                openDropdown();
+                filterStates(e.target.value.trim());
+            });
+
+            optionItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectState(item.getAttribute('data-value'), item.textContent.trim());
+                });
+            });
+
+            // Keyboard Navigation
+            searchInput.addEventListener('keydown', (e) => {
+                const visibleItems = optionItems.filter(el => el.style.display !== 'none');
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (dropdownList.style.display !== 'block') {
+                        openDropdown();
+                        return;
+                    }
+                    highlightedIndex = (highlightedIndex + 1) % visibleItems.length;
+                    visibleItems.forEach((el, idx) => el.classList.toggle('highlighted', idx === highlightedIndex));
+                    if (visibleItems[highlightedIndex]) {
+                        visibleItems[highlightedIndex].scrollIntoView({ block: 'nearest' });
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (dropdownList.style.display !== 'block') {
+                        openDropdown();
+                        return;
+                    }
+                    highlightedIndex = (highlightedIndex - 1 + visibleItems.length) % visibleItems.length;
+                    visibleItems.forEach((el, idx) => el.classList.toggle('highlighted', idx === highlightedIndex));
+                    if (visibleItems[highlightedIndex]) {
+                        visibleItems[highlightedIndex].scrollIntoView({ block: 'nearest' });
+                    }
+                } else if (e.key === 'Enter') {
+                    if (dropdownList.style.display === 'block') {
+                        e.preventDefault();
+                        if (highlightedIndex >= 0 && visibleItems[highlightedIndex]) {
+                            const sel = visibleItems[highlightedIndex];
+                            selectState(sel.getAttribute('data-value'), sel.textContent.trim());
+                        } else if (visibleItems.length > 0) {
+                            selectState(visibleItems[0].getAttribute('data-value'), visibleItems[0].textContent.trim());
+                        }
+                    }
+                } else if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
+
+            // Close on Click Outside
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            // Land Area Acres <-> Hectares Unit Sync
+            const acresInput = document.getElementById('areaAcres');
+            const hectaresInput = document.getElementById('areaHectares');
+            if (acresInput && hectaresInput) {
+                acresInput.addEventListener('input', () => {
+                    const val = parseFloat(acresInput.value);
+                    if (!isNaN(val) && val >= 0) {
+                        hectaresInput.value = (val * 0.404686).toFixed(2);
+                    }
+                });
+                hectaresInput.addEventListener('input', () => {
+                    const val = parseFloat(hectaresInput.value);
+                    if (!isNaN(val) && val >= 0) {
+                        acresInput.value = (val * 2.47105).toFixed(2);
+                    }
+                });
+            }
+        });
+    </script>

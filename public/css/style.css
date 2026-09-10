@@ -3,12 +3,12 @@
    GovTech / Enterprise Dark Slate + Precision Cyan / Emerald
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Comic+Relief&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-    --bs-font-sans-serif: 'Comic Relief', cursive, sans-serif !important;
-    --bs-body-font-family: 'Comic Relief', cursive, sans-serif !important;
-    --font-main: 'Comic Relief', cursive, sans-serif;
+    --bs-font-sans-serif: "Noto Sans", Arial, sans-serif !important;
+    --bs-body-font-family: "Noto Sans", Arial, sans-serif !important;
+    --font-main: "Noto Sans", Arial, sans-serif;
 
     --navy-primary: #0F172A;
     --navy-secondary: #1E293B;
@@ -54,7 +54,7 @@ a,
 p,
 span,
 div {
-    font-family: 'Comic Relief', cursive, sans-serif !important;
+    font-family: "Noto Sans", Arial, sans-serif !important;
 }
 
 
@@ -138,7 +138,7 @@ body {
     --bs-table-hover-bg: rgba(255, 255, 255, 0.04) !important;
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
     background-color: transparent !important;
     border-bottom-color: rgba(255, 255, 255, 0.06) !important;
     color: #CBD5E1 !important;
@@ -499,38 +499,75 @@ body {
     z-index: 3;
 }
 
-.badge-sih {
-    background: rgba(16, 185, 129, 0.18);
-    border: 1px solid rgba(16, 185, 129, 0.45);
-    color: #34D399;
-    font-size: 0.825rem;
-    font-weight: 600;
-    padding: 0.4rem 0.95rem;
-    border-radius: 50rem;
+.hero-eyebrow-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    margin-bottom: 1.5rem;
-    backdrop-filter: blur(8px);
+    gap: 0.6rem;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(12px);
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 1.35rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero-pulse-dot {
+    width: 7px;
+    height: 7px;
+    background: #10B981;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #10B981;
+    animation: blink 2s infinite ease-in-out;
+}
+
+.hero-eyebrow-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #E2E8F0;
+    letter-spacing: 0.01em;
+}
+
+.hero-eyebrow-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #38BDF8;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
 }
 
 .hero-h1 {
-    font-size: clamp(2.3rem, 4.2vw, 3.6rem);
+    font-family: "Noto Sans", Arial, sans-serif !important;
+    font-size: clamp(1.95rem, 3.1vw, 2.65rem) !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.015em !important;
+    color: #FFFFFF !important;
+    margin-bottom: 1.25rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.hero-highlight-teal {
+    background: linear-gradient(135deg, #38BDF8 0%, #2DD4BF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 800;
-    line-height: 1.25;
-    letter-spacing: normal;
-    color: #FFFFFF;
-    margin-bottom: 1.4rem;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+    display: inline-block;
 }
 
 .hero-description {
-    font-size: 1.1rem;
-    line-height: 1.65;
-    color: #F1F5F9;
-    max-width: 600px;
+    font-family: "Noto Sans", Arial, sans-serif !important;
+    font-size: 1.02rem !important;
+    line-height: 1.65 !important;
+    color: #E2E8F0 !important;
+    max-width: 580px;
     margin-bottom: 2.2rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    font-weight: 400 !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
 }
 
 /* CTA Buttons */
@@ -541,16 +578,16 @@ body {
 }
 
 .btn-primary-teal {
-    background: linear-gradient(135deg, #0891B2 0%, #06B6D4 100%);
+    background: #0891B2;
     color: #FFFFFF !important;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     font-weight: 600;
-    font-size: 0.975rem;
-    min-height: 48px;
-    padding: 0.85rem 1.6rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.45);
-    transition: all 0.25s ease;
+    font-size: 0.95rem;
+    min-height: 46px;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
@@ -559,21 +596,23 @@ body {
 
 .btn-primary-teal:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(6, 182, 212, 0.65);
-    background: linear-gradient(135deg, #0e7490 0%, #0891B2 100%);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    background: #0e7490;
+    color: #FFFFFF !important;
 }
 
 .btn-outline-gov {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     color: #E2E8F0 !important;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(8px);
     font-weight: 600;
     font-size: 0.95rem;
-    min-height: 48px;
-    padding: 0.85rem 1.45rem;
-    border-radius: 12px;
-    transition: all 0.25s ease;
+    min-height: 46px;
+    padding: 0.8rem 1.45rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
@@ -581,35 +620,41 @@ body {
 }
 
 .btn-outline-gov:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.28);
     color: #FFFFFF !important;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .btn-outline-danger-gov {
-    background: rgba(239, 68, 68, 0.08);
-    color: #F87171 !important;
-    border: 1px solid rgba(239, 68, 68, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+    color: #E2E8F0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(8px);
     font-weight: 600;
     font-size: 0.95rem;
-    min-height: 48px;
-    padding: 0.85rem 1.45rem;
-    border-radius: 12px;
-    transition: all 0.25s ease;
+    min-height: 46px;
+    padding: 0.8rem 1.45rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
     text-decoration: none;
 }
 
+.btn-outline-danger-gov i {
+    color: #F87171;
+}
+
 .btn-outline-danger-gov:hover {
-    background: rgba(239, 68, 68, 0.2);
-    border-color: var(--danger-red);
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.3);
     color: #FFFFFF !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 18px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 /* ==========================================================================
@@ -718,7 +763,7 @@ body {
 }
 
 .metric-box-val {
-    font-family: 'Comic Relief', cursive, sans-serif !important;
+    font-family: "Noto Sans", Arial, sans-serif !important;
     font-size: 2.15rem;
     font-weight: 800;
     line-height: 1.1;
@@ -772,7 +817,7 @@ body {
 .accuracy-pill {
     background-color: #FFFFFF !important;
     color: #000000 !important;
-    font-family: 'Comic Relief', cursive, sans-serif !important;
+    font-family: "Noto Sans", Arial, sans-serif !important;
     font-size: 0.85rem;
     font-weight: 800 !important;
     padding: 0.5rem 1.15rem;
@@ -937,7 +982,7 @@ body {
 .btn-launch-assessment {
     background-color: #F8F9FA !important;
     color: #000000 !important;
-    font-family: 'Comic Relief', cursive, sans-serif !important;
+    font-family: "Noto Sans", Arial, sans-serif !important;
     font-weight: 800;
     font-size: 1.05rem;
     padding: 1.1rem 2.85rem;
@@ -1013,7 +1058,7 @@ body {
 }
 
 .tech-badge i {
-    color: #1ED760;
+    color: #FFFFFF !important;
     font-size: 0.8rem;
 }
 
@@ -1344,7 +1389,7 @@ body.light-theme .table {
     color: #0F172A !important;
 }
 
-body.light-theme .table > :not(caption) > * > * {
+body.light-theme .table> :not(caption)>*>* {
     color: #334155 !important;
     border-bottom-color: #E2E8F0 !important;
 }
@@ -1367,4 +1412,93 @@ body.light-theme .badge.bg-light {
 body.light-theme .bg-light {
     background-color: #F8FAFC !important;
     color: #334155 !important;
+}
+
+/* ==========================================================================
+   Assessment Show Page Risk Classes
+   ========================================================================== */
+.show-header-card {
+    background: #1E1E1E !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.show-header-card.risk-high {
+    border-top: 3px solid #EF4444 !important;
+}
+.show-header-card.risk-medium {
+    border-top: 3px solid #F59E0B !important;
+}
+.show-header-card.risk-low {
+    border-top: 3px solid #10B981 !important;
+}
+
+.show-header-banner.risk-high {
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.08) 0%, rgba(18, 18, 18, 0) 100%) !important;
+}
+.show-header-banner.risk-medium {
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(18, 18, 18, 0) 100%) !important;
+}
+.show-header-banner.risk-low {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(18, 18, 18, 0) 100%) !important;
+}
+
+.risk-badge-pill.risk-high {
+    background: rgba(239, 68, 68, 0.16) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+.risk-badge-pill.risk-medium {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+.risk-badge-pill.risk-low {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+.text-risk-high {
+    color: #F87171 !important;
+}
+.text-risk-medium {
+    color: #FBBF24 !important;
+}
+.text-risk-low {
+    color: #34D399 !important;
+}
+
+.progress-bar-risk-high {
+    background: linear-gradient(90deg, #F59E0B, #EF4444) !important;
+    border-radius: 999px;
+}
+.progress-bar-risk-medium {
+    background: linear-gradient(90deg, #34D399, #F59E0B) !important;
+    border-radius: 999px;
+}
+.progress-bar-risk-low {
+    background: linear-gradient(90deg, #06B6D4, #10B981) !important;
+    border-radius: 999px;
+}
+
+.escrow-badge-available {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.28) !important;
+    font-size: 0.7rem;
+}
+.escrow-badge-pending {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.28) !important;
+    font-size: 0.7rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-h1 {
+        font-size: 1.6rem !important;
+    }
+    .hero-description {
+        font-size: 0.92rem !important;
+    }
 }

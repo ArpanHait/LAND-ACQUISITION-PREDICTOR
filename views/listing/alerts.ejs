@@ -1,118 +1,117 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container py-4">
+<div class="container-fluid py-3 px-3 px-lg-4" style="max-width: 1300px;">
 
-    <!-- Page Header -->
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <!-- Page Header (Compact) -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <div>
-            <h2 class="fw-bold text-navy mb-1">
-                <i class="bi bi-bell-fill text-white me-2"></i> High-Risk Alerts
+            <h4 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-bell-fill text-danger"></i> High-Risk Alerts
                 <% if (alerts.length > 0) { %>
-                <span class="badge bg-danger rounded-pill ms-2" style="font-size:14px;"><%= alerts.length %></span>
+                <span class="badge rounded-pill" style="background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 0.75rem; padding: 0.25rem 0.6rem;">
+                    <%= alerts.length %> Active Flag<%= alerts.length > 1 ? 's' : '' %>
+                </span>
                 <% } %>
-            </h2>
-            <p class="text-muted mb-0">Projects flagged with delay probability ≥ 65% — requiring immediate intervention</p>
+            </h4>
+            <div class="text-muted small" style="font-size: 0.8rem;">Projects flagged with delay probability &ge; 65% requiring immediate CALA administrative intervention</div>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <a href="/dashboard" class="btn btn-gis-pill">
+            <a href="/dashboard" class="btn btn-gis-pill btn-sm py-1 px-2.5">
                 <i class="bi bi-bar-chart-line-fill text-info"></i>
                 <span>Analytics Dashboard</span>
             </a>
-            <a href="/predict" class="btn btn-teal btn-sm fw-bold">
+            <a href="/predict" class="btn btn-teal btn-sm fw-semibold py-1 px-3">
                 <i class="bi bi-plus-circle me-1"></i> New Assessment
             </a>
         </div>
     </div>
 
-    <!-- Alert Summary Banner -->
+    <!-- Alert Summary Banner (Compact HUD Strip) -->
     <% if (alerts.length > 0) { %>
-    <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 rounded-3 shadow-sm mb-3" role="alert" style="font-size: 0.875rem;">
-        <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0 text-danger"></i>
-        <div>
-            <strong><%= alerts.length %> project<%= alerts.length > 1 ? 's' : '' %> require immediate attention:</strong>
-            Predicted delay probability &ge; 65%. Immediate CALA administrative intervention is recommended.
+    <div class="card border-0 rounded-3 p-2.5 px-3 mb-3 d-flex flex-row align-items-center gap-2.5" style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid #EF4444 !important; font-size: 0.82rem; color: #E2E8F0;">
+        <i class="bi bi-exclamation-triangle-fill text-danger flex-shrink-0" style="font-size: 1.1rem;"></i>
+        <div class="flex-grow-1">
+            <strong class="text-white"><%= alerts.length %> critical corridor<%= alerts.length > 1 ? 's' : '' %> identified:</strong>
+            Predicted delay probability &ge; 65%. Urgent administrative resolution of legal objections and title disputes recommended.
         </div>
     </div>
     <% } else { %>
-    <div class="text-center py-4">
-        <i class="bi bi-check-circle-fill text-success" style="font-size:3rem;"></i>
-        <h5 class="fw-bold text-navy mt-2">No Active High-Risk Alerts</h5>
-        <p class="text-muted small">All currently assessed projects have delay probability below 65%.</p>
-        <a href="/predict" class="btn btn-teal btn-sm mt-1">Run New Assessment</a>
+    <div class="card border-0 rounded-3 p-4 mb-3 text-center" style="background: #1E1E1E;">
+        <i class="bi bi-check-circle-fill text-success mb-2" style="font-size: 2.2rem;"></i>
+        <h6 class="fw-bold text-white mb-1">No Active High-Risk Alerts</h6>
+        <p class="text-muted small mb-2">All currently assessed projects have predicted delay probability below 65%.</p>
+        <div>
+            <a href="/predict" class="btn btn-teal btn-sm py-1 px-3">Run New Assessment</a>
+        </div>
     </div>
     <% } %>
 
-    <!-- Alert Cards -->
+    <!-- Alert Cards Stream -->
     <% alerts.forEach((c, idx) => { %>
-    <div class="card border-0 shadow-sm rounded-3 mb-2 overflow-hidden">
-        <div class="row g-0">
+    <div class="card border-0 rounded-3 mb-2 overflow-hidden" style="background: #1E1E1E; border: 1px solid rgba(255, 255, 255, 0.07); border-left: 3px solid #EF4444 !important;">
+        <div class="p-2.5 px-3">
+            <div class="row align-items-center gy-2">
 
-            <!-- Risk Severity Indicator Strip -->
-            <div class="col-auto d-flex align-items-stretch">
-                <div class="px-2 py-2 d-flex flex-column align-items-center justify-content-center text-white"
-                     style="background: linear-gradient(180deg, #dc3545, #b02a37); min-width: 44px;">
-                    <i class="bi bi-exclamation-triangle-fill fs-6 mb-1"></i>
-                    <div class="fw-bold text-center" style="font-size: 0.72rem;">#<%= idx + 1 %></div>
+                <!-- Left: Case Info & Metadata -->
+                <div class="col-md-5">
+                    <div class="d-flex align-items-center gap-1.5 mb-1">
+                        <span class="badge" style="background: #121212; color: #38BDF8; border: 1px solid rgba(255,255,255,0.08); font-size: 0.7rem; font-family: monospace;">
+                            <%= c.case_id %>
+                        </span>
+                        <span class="badge" style="background: rgba(239, 68, 68, 0.16); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.66rem; font-weight: 700; padding: 0.2rem 0.45rem;">
+                            CRITICAL #<%= idx + 1 %>
+                        </span>
+                    </div>
+                    <h6 class="fw-bold text-white mb-1" style="font-size: 0.9rem; line-height: 1.25;"><%= c.project_name || 'Infrastructure Corridor' %></h6>
+                    <div class="text-muted small d-flex flex-wrap align-items-center gap-2" style="font-size: 0.74rem;">
+                        <span><i class="bi bi-geo-alt me-1 text-teal"></i><%= c.state %> (<%= c.district_type %>)</span>
+                        <span>•</span>
+                        <span><i class="bi bi-building me-1 text-info"></i><%= c.project_type %></span>
+                        <span>•</span>
+                        <span><i class="bi bi-clock-history me-1 text-warning"></i><%= c.days_since_case_opened %>d active</span>
+                    </div>
                 </div>
+
+                <!-- Middle: Delay Probability Indicator -->
+                <div class="col-6 col-md-3 text-center">
+                    <div class="text-muted fw-semibold text-uppercase mb-0.5" style="font-size: 0.68rem; letter-spacing: 0.03em;">Delay Probability</div>
+                    <div class="fs-4 fw-bold text-danger lh-1 mb-1"><%= c.delay_probability_percent %></div>
+                    <div class="progress mx-auto" style="height: 4px; max-width: 130px; background-color: #121212; border-radius: 999px;">
+                        <div class="progress-bar"
+                             role="progressbar"
+                             data-width="<%= Math.round((c.delay_probability || 0) * 100) %>"
+                             style="background: linear-gradient(90deg, #F59E0B, #EF4444); border-radius: 999px;"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Top Delay Drivers & Action -->
+                <div class="col-6 col-md-4">
+                    <div class="text-muted fw-semibold text-uppercase mb-1" style="font-size: 0.68rem; letter-spacing: 0.03em;">Top Delay Drivers</div>
+                    <% if (c.top_risk_factors && c.top_risk_factors.length > 0) { %>
+                        <% c.top_risk_factors.slice(0, 2).forEach(f => { %>
+                        <div class="d-flex align-items-start gap-1 mb-0.5" style="line-height: 1.25;">
+                            <i class="bi bi-x-circle-fill text-danger flex-shrink-0 mt-0.5" style="font-size: 9px;"></i>
+                            <span class="text-light" style="font-size: 0.74rem;"><%= f %></span>
+                        </div>
+                        <% }) %>
+                    <% } %>
+                    <div class="mt-1.5 text-end">
+                        <a href="/history/<%= c._id %>" class="btn btn-outline-danger btn-sm py-0.5 px-2.5 fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 0.72rem; border-radius: 6px;">
+                            <span>Full Report</span> <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="col p-3">
-                <div class="row align-items-center gy-2">
-
-                    <!-- Case Info -->
-                    <div class="col-md-5">
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-light text-muted border" style="font-size: 0.7rem;"><%= c.case_id %></span>
-                            <span class="badge bg-danger text-white" style="font-size: 0.68rem; padding: 0.25rem 0.5rem;">HIGH RISK</span>
-                        </div>
-                        <h6 class="fw-bold text-white mb-1" style="font-size: 0.95rem;"><%= c.project_name || 'Infrastructure Project' %></h6>
-                        <p class="text-muted small mb-0" style="font-size: 0.78rem;">
-                            <i class="bi bi-geo-alt me-1"></i><%= c.state %> (<%= c.district_type %>) &nbsp;•&nbsp;
-                            <i class="bi bi-building me-1"></i><%= c.project_type %> &nbsp;•&nbsp;
-                            <i class="bi bi-calendar me-1"></i><%= c.days_since_case_opened %>d active
-                        </p>
-                    </div>
-
-                    <!-- Probability & Stage -->
-                    <div class="col-md-3 text-center">
-                        <div class="text-muted fw-semibold text-uppercase mb-1" style="font-size: 0.7rem;">Delay Probability</div>
-                        <div class="fs-4 fw-extrabold text-danger lh-1"><%= c.delay_probability_percent %></div>
-                        <div class="progress mt-1 mx-auto" style="height: 4px; max-width: 140px;">
-                            <div class="progress-bar bg-danger"
-                                 role="progressbar"
-                                 data-width="<%= Math.round((c.delay_probability || 0) * 100) %>"></div>
-                        </div>
-                    </div>
-
-                    <!-- Top Bottleneck -->
-                    <div class="col-md-4">
-                        <div class="text-muted fw-semibold text-uppercase mb-1" style="font-size: 0.7rem;">Top Delay Drivers</div>
-                        <% if (c.top_risk_factors && c.top_risk_factors.length > 0) { %>
-                            <% c.top_risk_factors.slice(0, 2).forEach(f => { %>
-                            <div class="d-flex align-items-start gap-1 mb-1">
-                                <i class="bi bi-x-circle-fill text-danger flex-shrink-0 mt-1" style="font-size:10px;"></i>
-                                <span class="small text-light" style="font-size: 0.78rem;"><%= f %></span>
-                            </div>
-                            <% }) %>
-                        <% } %>
-                        <div class="mt-2 text-md-end">
-                            <a href="/history/<%= c._id %>" class="btn btn-outline-danger btn-sm py-1 px-2 fw-semibold" style="font-size: 0.75rem; border-radius: 500px;">
-                                <i class="bi bi-arrow-right-circle me-1"></i> Full Report
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Recommended Action Preview -->
-                <% if (c.recommended_preventive_actions && c.recommended_preventive_actions[0]) { %>
-                <div class="mt-2 py-1 px-2 rounded-2 d-flex gap-2 align-items-center" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.22); font-size: 0.78rem;">
-                    <i class="bi bi-clipboard-check-fill text-danger flex-shrink-0"></i>
-                    <span style="color: #FCA5A5;"><strong class="text-white">Priority Action:</strong> <%= c.recommended_preventive_actions[0] %></span>
-                </div>
-                <% } %>
-
+            <!-- Bottom Recommended Action Strip (Compact) -->
+            <% if (c.recommended_preventive_actions && c.recommended_preventive_actions[0]) { %>
+            <div class="mt-2 py-1 px-2.5 rounded-2 d-flex gap-2 align-items-center" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.16); font-size: 0.74rem;">
+                <i class="bi bi-clipboard-check-fill text-danger flex-shrink-0" style="font-size: 0.82rem;"></i>
+                <span style="color: #CBD5E1;"><strong class="text-danger">Priority Action:</strong> <%= c.recommended_preventive_actions[0] %></span>
             </div>
+            <% } %>
+
         </div>
     </div>
     <% }) %>

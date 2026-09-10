@@ -65,7 +65,7 @@
                                         </div>
                                         <div class="col-6">
                                             <span class="text-muted d-block">Land Area</span>
-                                            <strong class="text-dark fs-6">
+                                            <strong class="text-white fs-6">
                                                 <%= item.land_area_acres %> Ac
                                             </strong>
                                         </div>
@@ -103,6 +103,36 @@
                         </div>
                         <% }); %>
                 </div>
+
+                <!-- Pagination Bar -->
+                <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-5 pt-3 border-top border-secondary border-opacity-25">
+                        <div class="text-muted small">
+                            Showing page <strong class="text-white"><%= currentPage %></strong> of <strong class="text-white"><%= totalPages %></strong> (<%= totalRecords %> total assessments)
+                        </div>
+                        <nav aria-label="History pagination">
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item <%= currentPage <= 1 ? 'disabled' : '' %>">
+                                    <a class="page-link bg-dark text-white border-secondary border-opacity-50" href="/history?page=<%= currentPage - 1 %>">
+                                        <i class="bi bi-chevron-left me-1"></i> Prev
+                                    </a>
+                                </li>
+                                <% for (let p = Math.max(1, currentPage - 2); p <= Math.min(totalPages, currentPage + 2); p++) { %>
+                                    <li class="page-item <%= p === currentPage ? 'active' : '' %>">
+                                        <a class="page-link <%= p === currentPage ? 'bg-teal text-white border-0 fw-bold' : 'bg-dark text-white border-secondary border-opacity-50' %>" href="/history?page=<%= p %>">
+                                            <%= p %>
+                                        </a>
+                                    </li>
+                                <% } %>
+                                <li class="page-item <%= currentPage >= totalPages ? 'disabled' : '' %>">
+                                    <a class="page-link bg-dark text-white border-secondary border-opacity-50" href="/history?page=<%= currentPage + 1 %>">
+                                        Next <i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                <% } %>
 
                 <% } %>
 
